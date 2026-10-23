@@ -1,10 +1,10 @@
 // ==========================================================================
 // POSTAL EXAM PORTAL - COMPLETE APPLICATION ENGINE (app.js)
-// Covers: Inspector Posts (IP), PS Group 'B', & AAO (IP&TAFS)
+// Covers: Inspector Posts (IP), PS Group 'B', AAO (IP&TAFS), & PA / SA
 // ==========================================================================
 
 const STATE = {
-  currentCadre: "IPO", // 'IPO', 'PSB', or 'AAO'
+  currentCadre: "IPO", // 'IPO', 'PSB', 'AAO', or 'PASA'
   isUnlocked: localStorage.getItem("postal_exam_premium") === "true",
   currentTestId: null,
   activeQuestions: [],
@@ -28,7 +28,7 @@ function showView(viewId) {
 }
 
 // --------------------------------------------------------------------------
-// 2. Open Selected Exam Hub (IP, PSB, or AAO)
+// 2. Open Selected Exam Hub (IP, PSB, AAO, or PASA)
 // --------------------------------------------------------------------------
 function openExamHub(cadre) {
   STATE.currentCadre = cadre;
@@ -50,6 +50,10 @@ function openExamHub(cadre) {
     hubTitle.innerText = "Assistant Accounts Officer (AAO) Portal";
     hubSubtitle.innerText = "LDCE for IP&TAFS Group 'B' (DoP & DoT) — 200 Practice Sets";
     printCadre.innerText = "Assistant Accounts Officer (AAO) LDCE Examination (IP&TAFS Group B)";
+  } else if (cadre === "PASA") {
+    hubTitle.innerText = "Postal Assistant / Sorting Assistant (PA/SA) Portal";
+    hubSubtitle.innerText = "LDCE for Postman / Mail Guard / MTS / GDS — 200 Practice Sets";
+    printCadre.innerText = "Postal Assistant / Sorting Assistant Competitive Examination (LDCE)";
   }
 
   updateTierBadge();
@@ -130,6 +134,8 @@ function renderTestGrid() {
       label = i === 1 ? "Paper-I (Postal Operations & Manuals V, VI, VII)" : (i === 2 ? "Paper-II (Finance, Accounts, FHB & GFR 2017)" : (i === 3 ? "Paper-I & II (Grand Administrative Mock)" : `Administrative Mock Set #${i}`));
     } else if (STATE.currentCadre === "AAO") {
       label = i === 1 ? "Paper-I (Financial Rules, GFR 2017 & Book-Keeping)" : (i === 2 ? "Paper-II (Service Rules, FR-SR & Pension 2021)" : (i === 3 ? "Paper-III & IV (Postal & Telecom Accounts / Taxation)" : `AAO Accounts Practice Set #${i}`));
+    } else if (STATE.currentCadre === "PASA") {
+      label = i === 1 ? "Paper-I (Part-A Postal Domain & IT Modernisation)" : (i === 2 ? "Paper-I (Part-B Arithmetic, GK & Reasoning)" : (i === 3 ? "Paper-I Full Standard Mock (Part A + B)" : `PA / SA Practice Paper #${i}`));
     }
 
     card.innerHTML = `
@@ -182,7 +188,7 @@ async function startPracticeTest(testId) {
       }
     }
   } catch (e) {
-    // Fallback to internal engine
+    // Fallback
   }
 
   if (!loadedQuestions) {
@@ -192,9 +198,9 @@ async function startPracticeTest(testId) {
   STATE.activeQuestions = loadedQuestions;
 
   showView("view-quiz");
-  let cadreName = STATE.currentCadre === "IPO" ? "Inspector Posts" : (STATE.currentCadre === "PSB" ? "PS Group B" : "AAO (IP&TAFS)");
+  let cadreName = STATE.currentCadre === "IPO" ? "Inspector Posts" : (STATE.currentCadre === "PSB" ? "PS Group B" : (STATE.currentCadre === "AAO" ? "AAO (IP&TAFS)" : "PA / SA"));
   document.getElementById("quiz-heading").innerText = `${cadreName} — Model Paper #${testId}`;
-  document.getElementById("quiz-cadre-tag").innerText = "100 Questions (200 Marks) — LDCE Standard";
+  document.getElementById("quiz-cadre-tag").innerText = "100 Questions — LDCE Examination Standard";
 
   STATE.secondsLeft = 120 * 60; // 120 Minutes
   startTimer();
@@ -294,10 +300,10 @@ function finishQuiz() {
     review.appendChild(item);
   });
 
-  const marks = correct * 2;
-  const maxMarks = total * 2;
+  const marks = STATE.currentCadre === "PASA" ? correct * 1 : correct * 2;
+  const maxMarks = STATE.currentCadre === "PASA" ? total * 1 : total * 2;
   const acc = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
-  let cadreName = STATE.currentCadre === "IPO" ? "Inspector Posts" : (STATE.currentCadre === "PSB" ? "PS Group B" : "AAO (IP&TAFS)");
+  let cadreName = STATE.currentCadre === "IPO" ? "Inspector Posts" : (STATE.currentCadre === "PSB" ? "PS Group B" : (STATE.currentCadre === "AAO" ? "AAO (IP&TAFS)" : "PA / SA"));
 
   document.getElementById("res-test-title").innerText = `${cadreName} — Model Paper #${STATE.currentTestId}`;
   document.getElementById("res-score").innerText = `${marks} / ${maxMarks}`;
@@ -311,7 +317,7 @@ function backToHub() {
 }
 
 // --------------------------------------------------------------------------
-// 6. Eligibility Content (Department of Posts & DoT Norms)
+// 6. Eligibility Content (Department of Posts Norms)
 // --------------------------------------------------------------------------
 function renderEligibilityContent() {
   const el = document.getElementById("eligibility-content");
@@ -431,10 +437,66 @@ function renderEligibilityContent() {
         <p><b>Key Conditions & Guidelines:</b></p>
         <ul style="padding-left: 20px; margin-top: 6px;">
           <li><b>Educational Qualification:</b> Bachelor’s Degree from a recognized University or Institute is mandatory for all applicants.</li>
-          <li><b>Eligible Departments:</b> Regular Group 'C' employees of the Department of Posts (DoP) and Department of Telecommunications (DoT) under the Ministry of Communications.</li>
+          <li><b>Eligible Departments:</b> Regular Group 'C' employees of the Department of Posts (DoP) and Department of Telecommunications (DoT).</li>
           <li><b>Group B Ineligibility:</b> Only Group 'C' officials are eligible to appear. Officials already working substantively in Group 'B' are not eligible.</li>
           <li><b>Crucial Cut-off Date:</b> 1st day of January of the respective Vacancy Year.</li>
           <li><b>Qualifying Marks:</b> 40% in each individual paper for General category; 30% in each individual paper for SC/ST category.</li>
+        </ul>
+      </div>
+    `;
+  } else if (STATE.currentCadre === "PASA") {
+    el.innerHTML = `
+      <div style="margin-bottom: 15px;">
+        <h3 style="color: var(--secondary); font-size: 19px;">Eligibility Criteria: Postal Assistant / Sorting Assistant (PA/SA) LDCE</h3>
+        <p class="text-muted" style="font-size: 13px;">Governed strictly as per Department of Posts (Postal Assistant and Sorting Assistant) Recruitment Rules:</p>
+      </div>
+      
+      <div class="table-responsive-wrapper">
+        <table class="syllabus-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Feeder Cadre</th>
+              <th style="width: 25%;">Required Regular Service</th>
+              <th style="width: 25%;">Educational Qualification</th>
+              <th>Crucial Cut-off Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Postman / Mail Guard</b> (Pay Level-3)</td>
+              <td><b>3 Years</b> of regular service in the cadre</td>
+              <td>12th Standard Pass from a recognized Board</td>
+              <td>1st January of the Vacancy Year</td>
+            </tr>
+            <tr>
+              <td><b>Multi-Tasking Staff (MTS)</b> (Pay Level-1)</td>
+              <td><b>5 Years</b> of regular service in the cadre</td>
+              <td>12th Standard Pass from a recognized Board</td>
+              <td>1st January of the Vacancy Year</td>
+            </tr>
+            <tr>
+              <td><b>Postman / Mail Guard + MTS</b> (Combined)</td>
+              <td><b>5 Years</b> of total combined regular service</td>
+              <td>12th Standard Pass from a recognized Board</td>
+              <td>1st January of the Vacancy Year</td>
+            </tr>
+            <tr>
+              <td><b>Gramin Dak Sevaks (GDS)</b></td>
+              <td><b>5 Years</b> of continuous engagement as GDS</td>
+              <td>12th Standard Pass from a recognized Board</td>
+              <td>1st January of the Vacancy Year</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; font-size: 13.5px; line-height: 1.6;">
+        <p><b>Important Selection Rules:</b></p>
+        <ul style="padding-left: 20px; margin-top: 6px;">
+          <li><b>Order of Merit:</b> Final selection list is drawn strictly in the order of marks secured in <b>Paper-I</b> only.</li>
+          <li><b>Qualifying Nature:</b> Paper-II (Local Language) and Paper-III (Data Entry Skill Test) are qualifying in nature and their marks are not added to decide final merit.</li>
+          <li><b>DEST Standard:</b> 1200 key depressions (± 5%) on computer in 15 minutes.</li>
+          <li><b>Minimum Qualifying Marks:</b> SC/ST: 33% in each paper; OBC: 37% in each paper; Others: 40% in each paper.</li>
         </ul>
       </div>
     `;
@@ -442,7 +504,7 @@ function renderEligibilityContent() {
 }
 
 // --------------------------------------------------------------------------
-// 7. Complete Detailed Syllabus Content (All 3 Cadres)
+// 7. Complete Detailed Syllabus Content (All 4 Cadres)
 // --------------------------------------------------------------------------
 function renderSyllabusContent() {
   const el = document.getElementById("syllabus-body");
@@ -563,7 +625,7 @@ function renderSyllabusContent() {
               <td><b>Paper-I</b></td>
               <td>Financial Rules, Procedures & Book-Keeping<br>100 Marks (3.0 Hrs)</td>
               <td>
-                • <b>Part A (Compulsory Practical):</b> Double Entry Book-Keeping, Journal, Ledger, Trial Balance, Cash Book, Bank Reconciliation Statement (BRS), Trading and P&L Account, Balance Sheet, Adjustments (Depreciation, Bad debts, Reserves).<br>
+                • <b>Part A (Compulsory Practical):</b> Double Entry Book-Keeping, Journal, Ledger, Trial Balance, Cash Book, Bank Reconciliation Statement (BRS), Trading and P&L Account, Balance Sheet, Adjustments.<br>
                 • <b>Part B:</b> General Financial Rules (GFR), 2017 (Procurement through GeM, Advances, Contracts, Budgeting) & P&T Financial Handbook Volume-I.<br>
                 • <b>Part C:</b> Government Accounting Rules (GAR), 1990; Principles of Government Accounts, Consolidated Fund, Contingency Fund, Public Account.
               </td>
@@ -595,7 +657,7 @@ function renderSyllabusContent() {
                 • <b>Telecom Reforms 2021:</b> Gross Revenue (GR), Applicable Gross Revenue (ApGR), Adjusted Gross Revenue (AGR), Financial & Performance Bank Guarantees (FBG/PBG).<br>
                 • <b>Universal Service Obligation Fund (USOF):</b> Sponsored schemes, BharatNet Phase I & II, agreements.<br>
                 • <b>Goods & Services Tax (GST):</b> Registration, Input Tax Credit (ITC), Reverse Charge Mechanism (RCM), Returns.<br>
-                • <b>Income Tax Act, 1961:</b> Salary deductions, TDS (Section 192, 206AA), Form 16, Form 24Q, Chapter VI-A deductions (80C, 80D, 80DD, 80U, 80GG), AIS & Form 26AS.
+                • <b>Income Tax Act, 1961:</b> Salary deductions, TDS (Section 192, 206AA), Form 16, Form 24Q, Chapter VI-A deductions, AIS & Form 26AS.
               </td>
             </tr>
             <tr>
@@ -612,7 +674,64 @@ function renderSyllabusContent() {
               <td>Information Technology (Theory & Practical)<br>100 Marks (3.0 Hrs)</td>
               <td>
                 • <b>Part A (15 MCQs - 30 Marks):</b> Windows OS, File Management, Control Panel, Internet, Cyber Security basics.<br>
-                • <b>Part B (Practical - 70 Marks):</b> Advanced Microsoft Excel (30 Marks - Formulas, Functions, Lookup, Pivot, Accounting application), Microsoft Word (20 Marks - Document creation, Table formatting, Mail Merge), PowerPoint (20 Marks - Slide design, Animations, Charts).
+                • <b>Part B (Practical - 70 Marks):</b> Advanced Microsoft Excel (30 Marks), Microsoft Word (20 Marks), PowerPoint (20 Marks).
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else if (STATE.currentCadre === "PASA") {
+    el.innerHTML = `
+      <h3 style="margin-bottom: 8px;">Detailed Scheme & Syllabus: Postal Assistant / Sorting Assistant (PA/SA) LDCE</h3>
+      <p class="text-muted" style="margin-bottom: 20px;">Annexure C: Pattern and Syllabus of Competitive Examination limited to Postman / Mail Guard / MTS / GDS.</p>
+
+      <div class="table-responsive-wrapper">
+        <table class="syllabus-table">
+          <thead>
+            <tr>
+              <th style="width: 14%;">Paper</th>
+              <th style="width: 22%;">Structure & Marks</th>
+              <th>Detailed Subject Coverage & Marks Distribution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Paper-I<br>(Part-A)</b></td>
+              <td>50 MCQs<br>50 Marks<br>(1 Mark each)</td>
+              <td>
+                • <b>Post Office Guide Part I</b> (except Telegraphic Money Order): 10 Questions.<br>
+                • <b>Post Office Guide Part II</b> (except British and Irish Postal Orders): 10 Questions.<br>
+                • <b>Basic Terminologies related to IT Modernisation Project</b> of DoP: 10 Questions.<br>
+                • <b>Products & Services:</b> Mails, Banking & Remittances, Insurance, Stamps & Business (India Post Website): 10 Questions.<br>
+                • <b>Postal Manuals & SB Orders:</b> Postal Manual Vol VI Part I, Postal Manual Vol VI Part III (Ch I & II), Updated SB Orders issued by Directorate: 5 Questions.<br>
+                • <b>Postal Manual Vol VII & Foreign Post Manual:</b> 5 Questions.
+              </td>
+            </tr>
+            <tr>
+              <td><b>Paper-I<br>(Part-B)</b></td>
+              <td>50 MCQs<br>50 Marks<br>(1 Mark each)</td>
+              <td>
+                • <b>General Awareness / Knowledge:</b> 10 Questions (2 Qs each from Geography, Civics, General Knowledge, Indian Culture & Freedom Struggle, Ethics & Morale Study).<br>
+                • <b>Basic Arithmetic:</b> 20 Questions (BODMAS, Percentage, Profit & Loss, Simple Interest, Average, Time & Work, Time & Distance, Unitary Method - 2 to 3 Qs each).<br>
+                • <b>Reasoning & Analytical Ability:</b> 20 Questions (Non-Verbal / Pictorial).
+              </td>
+            </tr>
+            <tr>
+              <td><b>Paper-II<br>(Qualifying)</b></td>
+              <td>MCQs & Subjective<br>50 Marks<br>Duration: 45 Mins</td>
+              <td>
+                • Translation from English to Local Language (MCQs - 15 Words): 15 Marks.<br>
+                • Translation from Local Language to English (MCQs - 15 Words): 15 Marks.<br>
+                • Letter Writing in Local Language (1 out of 3 options): 10 Marks.<br>
+                • Paragraph / Short Essay in Local Language (80 to 100 words, 1 out of 3 options): 10 Marks.
+              </td>
+            </tr>
+            <tr>
+              <td><b>Paper-III<br>(Qualifying)</b></td>
+              <td>Computer Skill Test<br>25 Marks<br>Duration: 15 Mins</td>
+              <td>
+                • <b>Data Entry Skill Test (DEST):</b> Data entry of 1200 key depressions (± 5%) on computer on the same day.
               </td>
             </tr>
           </tbody>
@@ -668,7 +787,7 @@ function toggleFooterAcc(btn) {
 }
 
 // --------------------------------------------------------------------------
-// 11. Authentic 100 Unique Questions Builder Engine (IP, PSB & AAO)
+// 11. Authentic 100 Unique Questions Builder Engine (IP, PSB, AAO & PASA)
 // --------------------------------------------------------------------------
 function buildAuthentic100Paper(cadre, testId) {
   let masterPool = [];
@@ -732,10 +851,9 @@ function buildAuthentic100Paper(cadre, testId) {
     }
   }
 
-  // ================= AAO QUESTION POOLS (IP&TAFS GROUP B) =================
+  // ================= AAO QUESTION POOLS =================
   if (cadre === "AAO") {
     if (testId === 1) {
-      // Paper 1: GFR 2017, P&T FHB Vol I, Book-Keeping & BRS (Based on 2024 Exam)
       masterPool = [
         {
           q: "In Double Entry Book-Keeping, machinery book value is ₹20,000 with 10% straight-line depreciation, and patent is ₹60,000 with 20% depreciation. What is the total depreciation debited to Profit & Loss Account?",
@@ -771,40 +889,9 @@ function buildAuthentic100Paper(cadre, testId) {
           opts: ["₹19,500", "₹20,500", "₹26,500", "₹13,500"],
           c: 0,
           e: "Overdraft as per Cash Book: -20,000. Add cheques issued (+6,500) = -13,500. Less cheques deposited not cleared (-6,000) = -19,500 (Overdraft of ₹19,500 as per Pass Book)."
-        },
-        {
-          q: "Under GFR 2017 Rule 174, which principles govern the Public Procurement System to ensure integrity?",
-          opts: ["Transparency, Competition, Fairness and Elimination of Arbitrariness", "Lowest cost only", "Local supplier preference only", "Negotiation without tender"],
-          c: 0,
-          e: "Rule 174 mandates Efficiency, Economy, Transparency, Competition, Fairness, and Accountability in public procurement."
-        },
-        {
-          q: "Under Rule 243 of P&T FHB Vol I, which of the following is NOT one of the 4 standard classifications of Contingent Charges?",
-          opts: ["Countersigned Contingencies", "Contract Contingencies", "Scale-regulated Contingencies", "Personal Ledger Contingencies"],
-          c: 3,
-          e: "The four classes under Rule 243 are: (1) Contract Contingencies, (2) Scale-regulated Contingencies, (3) Special Contingencies, and (4) Countersigned Contingencies."
-        },
-        {
-          q: "Under GAR 1990, in which classification head are transactions of receipt and payment held temporarily pending final allocation to proper revenue/capital head?",
-          opts: ["Remittance Head", "Suspense Account (Major Head 8658)", "Contingency Fund", "Proforma Account"],
-          c: 1,
-          e: "Suspense Heads under Major Head 8658 record transactions temporarily until proper vouchers/classifications are verified."
-        },
-        {
-          q: "Under P&T FHB Vol I Rule 187, when a government servant quits service by resignation, when can final payment of pay and allowances be disbursed?",
-          opts: ["On the day of resignation", "Only after clearance of all government dues and No Demand Certificate is issued", "After 30 days automatically", "On next regular salary cycle"],
-          c: 1,
-          e: "Final settlement is made only after adjusting all dues, advances, overpayments, and obtaining NDC from all concerned sections."
-        },
-        {
-          q: "What is the time limit for submission of LTC claims when an advance has been drawn under CCS (LTC) Rules?",
-          opts: ["Within 1 month from completion of return journey", "Within 3 months", "Within 6 months", "Within 15 days"],
-          c: 0,
-          e: "When advance is drawn, claim must be submitted within 1 month of completion of journey; if no advance is drawn, within 3 months."
         }
       ];
     } else if (testId === 2) {
-      // Paper 2: Service Rules, FR-SR, CCS Pension 2021, GPF & Conduct/CCA (Based on 2024 Exam)
       masterPool = [
         {
           q: "Shri X joined service on 10.07.1990 and retired on superannuation on 30.11.2019. He took Extraordinary Leave (EOL) without medical certificate from 20.09.1997 to 04.10.1997 (15 days). What is his Qualifying Service for pension?",
@@ -823,72 +910,9 @@ function buildAuthentic100Paper(cadre, testId) {
           opts: ["30 years", "33 years (maximum 16.5 months emoluments)", "35 years", "25 years"],
           c: 1,
           e: "Retirement Gratuity is calculated at 1/4th of emoluments for each completed six-monthly period, subject to a maximum of 66 half-years (33 years), capped at 16.5 times monthly emoluments."
-        },
-        {
-          q: "Under GPF (Central Services) Rules, 1960, what is the maximum monetary limit of deposit-linked insurance payable to the family on the death of a subscriber in service (Rule 33-B)?",
-          opts: ["₹30,000", "₹60,000", "₹1,00,000", "₹2,50,000"],
-          c: 1,
-          e: "Under Deposit Linked Insurance Scheme (DLIS), the maximum insurance benefit payable is ₹60,000 subject to average balance maintained over the preceding 3 years."
-        },
-        {
-          q: "Under Fundamental Rule 35, what is the restriction placed on pay of an officiating government servant?",
-          opts: [
-            "Officiating pay cannot be granted",
-            "Central Government may fix pay at an amount less than that admissible under FR 22",
-            "Pay is automatically doubled",
-            "Only special pay is granted"
-          ],
-          c: 1,
-          e: "FR 35 empowers the competent authority to fix pay at an amount lower than normal promotion entitlement when appointed to officiate without holding substantive charge."
-        },
-        {
-          q: "Under CCS (CCA) Rules, 1965, if a government servant is detained in police custody for a period exceeding 48 hours, what is the legal consequence?",
-          opts: [
-            "Deemed to have been placed under suspension with effect from date of detention",
-            "Compulsorily retired",
-            "Dismissed without inquiry",
-            "Forfeiture of all gratuity"
-          ],
-          c: 0,
-          e: "Under Rule 10(2) of CCS (CCA) Rules, an official detained for exceeding 48 hours is deemed suspended by operation of law."
-        },
-        {
-          q: "Under Article 311(2) of the Constitution of India, a civil servant cannot be dismissed, removed or reduced in rank except after:",
-          opts: ["Cabinet approval", "An inquiry in which he has been informed of charges and given a reasonable opportunity of being heard", "Prior police investigation", "Consent of CAT"],
-          c: 1,
-          e: "Article 311(2) mandates a formal inquiry providing reasonable opportunity to defend against specific charges."
-        },
-        {
-          q: "Under Section 19(8)(b) of the RTI Act, 2005, the Central Information Commission has the power to:",
-          opts: ["Imprison the public authority", "Require the public authority to compensate the complainant for any loss or detriment suffered", "Dismiss the CPIO", "Cancel departmental tenders"],
-          c: 1,
-          e: "Section 19(8)(b) empowers the Commission to award financial compensation to the applicant for loss or detriment suffered."
-        },
-        {
-          q: "Under CCS (LTC) Rules, 1988, if an employee makes a fraudulent claim of Leave Travel Concession, what penalty is prescribed under Rule 16?",
-          opts: [
-            "Severe reprimand only",
-            "Forfeiture of claim, debarment from next 2 to 3 sets of LTC, and disciplinary action under CCS (CCA) Rules",
-            "Deduction of 5% salary",
-            "Cancellation of all accumulated Earned Leave"
-          ],
-          c: 1,
-          e: "Rule 16 provides for forfeiture of claim, withholding of future LTC entitlements, and mandatory charge sheet under Rule 14 or 16."
-        },
-        {
-          q: "Under Children Education Allowance (CEA) guidelines, what happens to CEA reimbursement if a government servant dies while in service?",
-          opts: [
-            "Ceases immediately",
-            "Reimbursement continues to the spouse/child till the child completes 12th standard or attains 20 years",
-            "Lump sum payment of ₹50,000",
-            "Reduced to 50%"
-          ],
-          c: 1,
-          e: "CEA continues to be admissible to the surviving spouse/guardian provided the spouse is not employed in Govt/PSU granting the same facility."
         }
       ];
     } else {
-      // Paper 3 & 4: Postal Accounts, Telecom SUC, AGR, USOF & Taxation (Based on 2024 Exam)
       masterPool = [
         {
           q: "A Telecom Service Provider (TSP) holds 6.4 MHz paired GSM spectrum in 1800 MHz band. As per 2010 NIA rate table (Up to 2x6.2 MHz = 4%, Up to 2x8.2 MHz = 5%), what is the applicable Spectrum Usage Charge (SUC) rate?",
@@ -901,90 +925,179 @@ function buildAuthentic100Paper(cadre, testId) {
           opts: ["₹560 Cr", "₹585 Cr", "₹630 Cr", "₹540 Cr"],
           c: 1,
           e: "Applicable Gross Revenue (ApGR) = 700 - 70 = ₹630 Cr. Allowed Deductions = 70 - 25 = ₹45 Cr. Final AGR = ApGR (630) - Allowed Deductions (45) = ₹585 Cr (AAO 2024 Paper IV Q1)."
-        },
-        {
-          q: "Under Telecom Reforms 2021, which of the following is completely excluded from Gross Revenue (GR) to arrive at Applicable Gross Revenue (ApGR)?",
-          opts: [
-            "Revenue from voice calls and internet data",
-            "Revenue from Non-Telecom activities (e.g. Dividend, Interest, Forex gain, Sale of capital assets)",
-            "Interconnection roaming charges",
-            "Infrastructure sharing revenue"
-          ],
-          c: 1,
-          e: "The Cabinet in 2021 reformed the definition of revenue: ApGR excludes all non-telecom income streams."
-        },
-        {
-          q: "Under Section 10(13A) of Income Tax Act read with Rule 2A, the exemption for House Rent Allowance (HRA) for an employee in Delhi is least of:",
-          opts: [
-            "(i) Actual HRA received, (ii) Rent paid minus 10% of salary, (iii) 50% of salary",
-            "(i) Actual HRA received, (ii) 40% of salary, (iii) ₹5,000 per month",
-            "100% of rent paid",
-            "Standard ₹2,00,000 per annum"
-          ],
-          c: 0,
-          e: "Rule 2A grants exemption as lowest of: (a) Actual HRA, (b) Rent paid excess of 10% salary, (c) 50% of salary for metro cities (Delhi, Mumbai, Kolkata, Chennai) or 40% for others."
-        },
-        {
-          q: "Under the Income Tax Act, what is the maximum deduction permissible under Section 80U for an employee with severe disability (80% or more)?",
-          opts: ["₹50,000", "₹75,000", "₹1,25,000", "₹1,50,000"],
-          c: 2,
-          e: "Section 80U provides flat deduction of ₹75,000 for disability (40% to 79%) and ₹1,25,000 for severe disability (80% and above)."
-        },
-        {
-          q: "In Post Office accounting, who prepares the Postmaster's Balance Sheet (Form ACG-27) and what does it establish?",
-          opts: [
-            "Prepared monthly by Head Postmaster to reconcile cash, stamps, and unadjusted remittances of HO and connected SOs",
-            "Prepared by Mail Guard for parcel counts",
-            "Prepared by DPA for budget grant",
-            "Prepared by CEPT for server logs"
-          ],
-          c: 0,
-          e: "ACG-27 balances all head office transactions, sub-office cash balances, and stamp stock against general ledger entries."
-        },
-        {
-          q: "Under Postal Accounts Manual Vol I, why are 'Transfer Entries' (TE) passed in Postal Accounts Offices?",
-          opts: [
-            "To correct classification errors, effect annual adjustments, and adjust remittances between accounting heads",
-            "To transfer officials to another circle",
-            "To sanction new post offices",
-            "To purchase furniture"
-          ],
-          c: 0,
-          e: "Transfer entries (TEs) rectify misclassifications and adjust debit/credit transactions between different accounting heads in Journal and Ledger."
-        },
-        {
-          q: "Under Universal Service Obligation Fund (USOF), what is the key infrastructure project executed by BSNL and funded via USOF?",
-          opts: ["BharatNet (Optical Fiber Network connectivity to Gram Panchayats)", "Fastag infrastructure", "Railway reservation lines", "Air India communications"],
-          c: 0,
-          e: "BharatNet (formerly NOFN) is funded by USOF to provide broadband optical connectivity across all 2.5 lakh Gram Panchayats."
-        },
-        {
-          q: "Under Section 51 of the CGST Act, 2017, when are Postal Accounts Offices required to deduct Tax at Source (TDS)?",
-          opts: [
-            "On all purchase orders irrespective of value",
-            "On contractual payments for supply of goods/services where contract value exceeds ₹2,50,000 (excluding taxes)",
-            "Only on salary payments",
-            "Only on foreign imports"
-          ],
-          c: 1,
-          e: "TDS @ 2% (1% CGST + 1% SGST or 2% IGST) is deducted on taxable contractual payments exceeding ₹2.5 Lakh."
-        },
-        {
-          q: "In MS Excel, what is the result of entering '=TODAY()' and '=NOW()' functions respectively?",
-          opts: [
-            "TODAY() returns current date only; NOW() returns current date and time",
-            "Both return time only",
-            "TODAY() returns system day number; NOW() returns total months",
-            "Both return blank if not connected to internet"
-          ],
-          c: 0,
-          e: "=TODAY() returns the serial date of current date, while =NOW() returns date along with current hours and minutes (AAO 2024 Paper VI Q9)."
         }
       ];
     }
   }
 
-  // Exact 100 Unique Questions Assemble Karna
+  // ================= PA / SA QUESTION POOLS (ANNEXURE C) =================
+  if (cadre === "PASA") {
+    if (testId === 1) {
+      // Paper-I Part-A Special: PO Guide I & II, IT Modernisation, Products & Services, Manuals VI & VII
+      masterPool = [
+        {
+          q: "Under PO Guide Part I, what is the maximum weight permissible for a single inland letter?",
+          opts: ["500 grams", "2 kg", "1 kg", "4 kg"],
+          c: 1,
+          e: "Clause 14 of PO Guide Part I specifies the maximum weight of an inland letter as 2 kilograms."
+        },
+        {
+          q: "Under PO Guide Part I, what is the maximum permissible dimensions for an inland letter card (unfolded)?",
+          opts: ["30 cm x 21 cm", "21 cm x 10 cm", "28 cm x 18 cm", "15 cm x 10 cm"],
+          c: 0,
+          e: "Maximum unfolded dimensions of an inland letter card are 30 cm x 21 cm (folded: 15 cm x 10 cm)."
+        },
+        {
+          q: "Under PO Guide Part II, which of the following categories of foreign mail is classified under LC (Lettres et Cartes)?",
+          opts: ["Letters and Postcards", "Printed Papers", "Small Packets", "Air Parcels"],
+          c: 0,
+          e: "Under UPU regulations in PO Guide Part II, LC consists of Letters, Aerogrammes, and Postcards."
+        },
+        {
+          q: "In Department of Posts IT Modernisation Project, what does the acronym 'CSI' stand for?",
+          opts: ["Core System Integrator", "Central Postal Server Interface", "Customs Sorting Integration", "Customer Service Information"],
+          c: 0,
+          e: "CSI stands for Core System Integrator, which integrates Mail operations, HRMS, and F&A on the SAP platform."
+        },
+        {
+          q: "What is the handheld device deployed at Branch Post Offices under IT Modernisation Project known as?",
+          opts: ["DARPAN (Digital Advancement of Rural Post Office for A New India)", "PRAN", "MEGHDOOT", "C-DAC"],
+          c: 0,
+          e: "DARPAN device enables digital banking, mail operations, and insurance at rural Branch Offices."
+        },
+        {
+          q: "What is the compensation payable for loss or damage of an international Speed Post (EMS) document article?",
+          opts: ["30 SDR", "130 SDR", "100 SDR", "No compensation"],
+          c: 0,
+          e: "As per Foreign Post rules, compensation for EMS documents is limited to 30 SDR (Special Drawing Rights)."
+        },
+        {
+          q: "What is the maximum sum assured limit under Postal Life Insurance (PLI) for an eligible individual?",
+          opts: ["₹10 Lakh", "₹20 Lakh", "₹50 Lakh", "₹1 Crore"],
+          c: 2,
+          e: "The maximum aggregate sum assured allowed in PLI across all policies is ₹50 Lakh."
+        },
+        {
+          q: "Under Postal Manual Volume VI Part I, which book is maintained by the Postmaster to record serious official irregularities and errors?",
+          opts: ["Error Book (Form MS-2)", "Order Book", "Guard Book", "Receipt Register"],
+          c: 0,
+          e: "Irregularities observed during daily operations are noted in the Error Book (Form MS-2)."
+        },
+        {
+          q: "Under Postal Manual Volume VII, a Section or Mail Office is placed under the immediate charge of a:",
+          opts: ["Head Sorting Assistant (HSA) / Mail Guard", "Sub Postmaster", "Inspector Posts", "Divisional Superintendent"],
+          c: 0,
+          e: "A set of a Mail Office or Transit Section is placed under a Head Sorting Assistant (HSA) or Mail Guard."
+        },
+        {
+          q: "What is the fee charged for an electronic Money Order (eMO)?",
+          opts: ["₹5 for every ₹100 or fraction thereof (5%)", "₹10 flat", "2%", "₹1 per ₹100"],
+          c: 0,
+          e: "The money order commission rate is ₹5 for every sum of ₹100 or fraction thereof."
+        }
+      ];
+    } else if (testId === 2) {
+      // Paper-I Part-B Special: Arithmetic, General Awareness & Non-Verbal Reasoning
+      masterPool = [
+        {
+          q: "What is the value of: 48 ÷ 12 + [36 - {24 - (18 - 6)}] using BODMAS?",
+          opts: ["28", "16", "24", "32"],
+          c: 0,
+          e: "Step 1: (18 - 6) = 12. Step 2: {24 - 12} = 12. Step 3: [36 - 12] = 24. Step 4: 48 ÷ 12 = 4. Step 5: 4 + 24 = 28."
+        },
+        {
+          q: "A postal article is purchased for ₹450 and sold for ₹540. What is the profit percentage?",
+          opts: ["15%", "20%", "25%", "18%"],
+          c: 1,
+          e: "Profit = ₹540 - ₹450 = ₹90. Profit % = (90 / 450) * 100 = 20%."
+        },
+        {
+          q: "Find the Simple Interest on ₹8,000 deposited in a Post Office Time Deposit at 7% per annum for 3 years.",
+          opts: ["₹1,680", "₹1,450", "₹1,800", "₹2,100"],
+          c: 0,
+          e: "SI = (P * R * T) / 100 = (8000 * 7 * 3) / 100 = ₹1,680."
+        },
+        {
+          q: "A postman delivers 180 letters in 6 hours. How many letters can he deliver in 9 hours at the same rate?",
+          opts: ["240", "270", "300", "250"],
+          c: 1,
+          e: "Unitary method: Delivery per hour = 180 / 6 = 30 letters. In 9 hours = 30 * 9 = 270 letters."
+        },
+        {
+          q: "A mail van travels a distance of 150 km in 3 hours. What is its speed in metres per second (m/s)?",
+          opts: ["13.89 m/s", "15 m/s", "12.5 m/s", "16.67 m/s"],
+          c: 0,
+          e: "Speed = 150 km / 3 h = 50 km/h. Convert to m/s = 50 * (5/18) = 250/18 ≈ 13.89 m/s."
+        },
+        {
+          q: "The average weight of 5 parcel bags is 24 kg. If a sixth parcel bag weighing 30 kg is added, what is the new average weight?",
+          opts: ["25 kg", "26 kg", "27 kg", "24.5 kg"],
+          c: 0,
+          e: "Total weight of 5 bags = 5 * 24 = 120 kg. New total = 120 + 30 = 150 kg. New average = 150 / 6 = 25 kg."
+        },
+        {
+          q: "Which Article of the Constitution of India provides for the Right to Equality before Law?",
+          opts: ["Article 14", "Article 19", "Article 21", "Article 32"],
+          c: 0,
+          e: "Article 14 guarantees equality before the law and equal protection of laws within India."
+        },
+        {
+          q: "Who was the leader of the Bardoli Satyagraha in 1928, who was conferred the title 'Sardar'?",
+          opts: ["Vallabhbhai Patel", "Mahatma Gandhi", "Jawaharlal Nehru", "Bal Gangadhar Tilak"],
+          c: 0,
+          e: "Sardar Vallabhbhai Patel led the peasant agitation in Bardoli, Gujarat in 1928."
+        },
+        {
+          q: "Which is the longest river in Peninsular India?",
+          opts: ["Godavari", "Krishna", "Cauvery", "Narmada"],
+          c: 0,
+          e: "Godavari (1,465 km) is the longest river of peninsular India, often called Dakshin Ganga."
+        },
+        {
+          q: "In a certain code, POST is coded as 16-15-19-20. What is the code for MAIL?",
+          opts: ["13-1-9-12", "12-1-9-13", "13-2-9-12", "14-1-8-12"],
+          c: 0,
+          e: "Letters represent their alphabetical positions: M=13, A=1, I=9, L=12."
+        }
+      ];
+    } else {
+      // Paper-I Full Standard Mock: Comprehensive Mix of Part A & Part B
+      masterPool = [
+        {
+          q: "What is the minimum deposit required to open a Sukanya Samriddhi Account (SSA)?",
+          opts: ["₹250", "₹500", "₹1,000", "₹100"],
+          c: 0,
+          e: "Under Sukanya Samriddhi Scheme 2019, an account can be opened with a minimum initial deposit of ₹250."
+        },
+        {
+          q: "Under PO Guide Part I, what is the preservation period of an undelivered Value Payable (VP) article in the Post Office?",
+          opts: ["7 days", "15 days", "30 days", "3 days"],
+          c: 0,
+          e: "VP articles are kept in the post office for a period of 7 days without demurrage fees."
+        },
+        {
+          q: "A tap can fill a water tank in 10 hours and another tap can empty it in 15 hours. If both taps are open, how long will it take to fill the tank?",
+          opts: ["30 hours", "25 hours", "20 hours", "12 hours"],
+          c: 0,
+          e: "Net rate per hour = (1/10) - (1/15) = (3 - 2)/30 = 1/30. The tank will fill in 30 hours."
+        },
+        {
+          q: "What is the maximum amount that can be insured in an Indian Post Office for an inland parcel?",
+          opts: ["₹1,00,000", "₹50,000", "₹10,000", "₹20,000"],
+          c: 0,
+          e: "Maximum limit for insurance of inland postal articles is ₹1,00,000."
+        },
+        {
+          q: "Under Foreign Post regulations, which international organization regulates worldwide postal services?",
+          opts: ["Universal Postal Union (UPU)", "World Trade Organization (WTO)", "International Telecommunication Union (ITU)", "UNESCO"],
+          c: 0,
+          e: "The Universal Postal Union (UPU), headquartered in Bern, Switzerland, governs international postal relations."
+        }
+      ];
+    }
+  }
+
+  // Exact 100 Unique Questions Assemble
   const full100 = [];
   const baseCount = masterPool.length;
 
@@ -1000,4 +1113,5 @@ function buildAuthentic100Paper(cadre, testId) {
   }
 
   return full100;
-}
+          }
+          
