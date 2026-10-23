@@ -11,13 +11,13 @@
 </head>
 <body>
 
-  <!-- Primary Navigation (Mobile Friendly) -->
+  <!-- Primary Navigation (Mobile & Desktop) -->
   <header class="navbar">
     <div class="container nav-content">
       <div class="brand-container" onclick="showView('view-home')">
         <div class="brand-logo-wrapper">
-          <img src="Postalexam.png" alt="Logo" class="brand-logo" onerror="this.parentElement.classList.add('logo-fallback')">
-          <div class="logo-fallback-icon">📮</div>
+          <img src="Postalexam.png" alt="Postal Exam Portal Logo" class="brand-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback-text').style.display='flex';">
+          <div id="logo-fallback-text" class="logo-fallback-box" style="display: none;">📮</div>
         </div>
         <div class="brand-text">
           <span class="brand-title">Postal Exam Portal</span>
@@ -57,8 +57,8 @@
             <p>Model Sets per Cadre</p>
           </div>
           <div class="metric-card">
-            <h3>50 Qs</h3>
-            <p>Per Standard Set</p>
+            <h3>100 Qs</h3>
+            <p>Per Practice Paper</p>
           </div>
           <div class="metric-card">
             <h3>3 Sets</h3>
@@ -86,7 +86,7 @@
           <ul class="exam-features">
             <li>✔ Paper-I (125 MCQs / 250 Marks) & Paper-III (150 MCQs / 300 Marks)</li>
             <li>✔ Paper-II Descriptive Guidance (Noting, Drafting & Charge Sheet)</li>
-            <li>✔ Tests 1 to 3 Free Diagnostic Practice (50 Qs each)</li>
+            <li>✔ Tests 1, 2, 3 Free Practice (100 Unique Questions Each)</li>
             <li>✔ Full Eligibility Norms & Detailed Printable Syllabus</li>
           </ul>
           <div class="card-actions">
@@ -104,7 +104,7 @@
           <ul class="exam-features">
             <li>✔ Paper-I: Postal Operations, Manuals & Technology</li>
             <li>✔ Paper-II: Establishment, CCS Rules, Financial Manuals & Acts</li>
-            <li>✔ Tests 1 to 3 Free Practice + 197 Advanced Full Practice Sets</li>
+            <li>✔ Tests 1, 2, 3 Free Practice (100 Unique Questions Each) + 197 Paid Sets</li>
             <li>✔ Comprehensive Eligibility Matrix & Complete Syllabus</li>
           </ul>
           <div class="card-actions">
@@ -182,7 +182,7 @@
         <div class="filter-strip">
           <input type="text" id="test-search" placeholder="Search test paper (e.g. Paper 1, Paper 15)..." onkeyup="filterTests()">
           <div class="quick-status">
-            <span>Tests 1 to 3: <strong class="text-success">Free Practice</strong></span>
+            <span>Tests 1 to 3: <strong class="text-success">Free Practice (100 Qs each)</strong></span>
             <span>Tests 4 to 200: <strong class="text-warning">Premium Access</strong></span>
           </div>
         </div>
@@ -195,7 +195,7 @@
       <!-- Tab Content 2: Eligibility Criteria -->
       <div id="hub-tab-eligibility" class="hub-tab-content hidden">
         <div class="doc-card" id="eligibility-content">
-          <!-- Dynamic Content rendered by JS -->
+          <!-- Rendered by app.js -->
         </div>
       </div>
 
@@ -211,8 +211,11 @@
         <div id="syllabus-document" class="printable-syllabus-sheet">
           <div class="print-header">
             <div class="print-brand">
-              <h3>POSTAL EXAM PORTAL</h3>
-              <p class="site-link">Departmental Competitive Examination Hub</p>
+              <img src="Postalexam.png" alt="Logo" class="print-logo" onerror="this.style.display='none'">
+              <div>
+                <h3>POSTAL EXAM PORTAL</h3>
+                <p class="site-link">Departmental Competitive Examination Hub</p>
+              </div>
             </div>
             <div class="print-meta">
               <span id="print-cadre-title">Departmental LDCE Examination</span>
@@ -221,7 +224,7 @@
           </div>
 
           <div id="syllabus-body">
-            <!-- Full line-by-line syllabus injected by JS -->
+            <!-- Full syllabus injected by JS -->
           </div>
 
           <div class="print-footer">
@@ -233,7 +236,7 @@
     </div>
   </main>
 
-  <!-- ================= VIEW 3: QUIZ PRACTICE SCREEN (50 QUESTIONS) ================= -->
+  <!-- ================= VIEW 3: QUIZ PRACTICE SCREEN (100 QUESTIONS) ================= -->
   <main id="view-quiz" class="page-view hidden">
     <div class="container quiz-wrapper">
       <div class="quiz-nav-bar">
@@ -242,12 +245,12 @@
           <h3 id="quiz-heading">Paper</h3>
           <span id="quiz-cadre-tag" class="cadre-tag">Departmental Examination</span>
         </div>
-        <div id="quiz-timer" class="timer-box">⏱ 60:00</div>
+        <div id="quiz-timer" class="timer-box">⏱ 120:00</div>
       </div>
 
       <div class="quiz-card">
         <div class="quiz-card-header">
-          <span id="q-counter">Question 1 of 50</span>
+          <span id="q-counter">Question 1 of 100</span>
           <span class="marks-info">+2.0 Marks for Correct Answer</span>
         </div>
         <div id="q-text" class="question-statement"></div>
@@ -272,7 +275,7 @@
         <div class="result-stats">
           <div class="stat-box">
             <span id="res-score" class="stat-number">0</span>
-            <span class="stat-label">Marks Obtained (Out of 100)</span>
+            <span class="stat-label">Marks Obtained (Out of 200)</span>
           </div>
           <div class="stat-box">
             <span id="res-correct" class="stat-number text-success">0</span>
@@ -336,7 +339,10 @@
       <!-- Accordion 1: About Portal -->
       <div class="footer-acc-item">
         <button class="footer-acc-header" onclick="toggleFooterAcc(this)">
-          <span>Postal Exam Portal Overview</span>
+          <div class="footer-brand-title">
+            <img src="Postalexam.png" alt="Logo" class="footer-logo-img" onerror="this.style.display='none'">
+            <span>Postal Exam Portal Overview</span>
+          </div>
           <span class="acc-chevron">+</span>
         </button>
         <div class="footer-acc-body">
