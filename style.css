@@ -1,0 +1,58 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: #f3f6f9; color: #2d3748; line-height: 1.6; }
+
+.navbar { background: #1a365d; color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+.badge { background: #3182ce; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+
+.container { max-width: 1000px; margin: 25px auto; padding: 0 15px; }
+.hidden { display: none !important; }
+
+.banner { background: #ebf8ff; border-left: 5px solid #3182ce; padding: 18px; border-radius: 8px; margin-bottom: 20px; }
+.search-box input { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; margin-bottom: 20px; font-size: 16px; }
+
+.grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+.card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); display: flex; flex-direction: column; justify-content: space-between; }
+.card.free { border-top: 4px solid #38a169; }
+.card.locked { border-top: 4px solid #e53e3e; }
+.card h4 { font-size: 16px; margin-bottom: 8px; }
+.card-tag { font-size: 12px; font-weight: bold; margin-bottom: 15px; display: inline-block; }
+.tag-free { color: #38a169; }
+.tag-locked { color: #e53e3e; }
+
+button { cursor: pointer; padding: 10px 18px; border-radius: 6px; border: none; font-weight: bold; font-size: 14px; }
+.btn-primary { background: #3182ce; color: white; }
+.btn-secondary { background: #e2e8f0; color: #4a5568; }
+.btn-nav { background: #edf2f7; color: #2d3748; }
+.btn-submit { background: #38a169; color: white; }
+.btn-success { background: #38a169; color: white; width: 100%; margin-top: 10px; }
+
+/* Quiz layout */
+.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.timer-badge { background: #feebc8; color: #c05621; padding: 8px 15px; border-radius: 8px; font-weight: bold; }
+.question-container { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.q-number { font-size: 13px; color: #718096; margin-bottom: 10px; }
+.q-text { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+
+.option-item { background: #edf2f7; padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+.option-item:hover { background: #e2e8f0; }
+.option-item.selected { background: #ebf8ff; border-color: #3182ce; color: #2b6cb0; font-weight: bold; }
+
+.quiz-footer { display: flex; justify-content: space-between; margin-top: 20px; }
+
+/* Result */
+.score-card { background: white; padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.score-metrics { display: flex; justify-content: space-around; margin: 20px 0; }
+.metric span { display: block; font-size: 26px; font-weight: bold; color: #2b6cb0; }
+.metric label { font-size: 13px; color: #718096; }
+
+.review-item { background: white; padding: 18px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid #cbd5e0; }
+.review-item.correct { border-left-color: #38a169; }
+.review-item.wrong { border-left-color: #e53e3e; }
+.explanation-box { background: #f7fafc; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 13px; color: #4a5568; }
+
+/* Modal */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 440px; position: relative; }
+.close { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; }
+.payment-box { background: #fffaf0; border: 1px dashed #dd6b20; padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 14px; }
+.key-input-section input { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; }
