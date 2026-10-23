@@ -1,100 +1,359 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PS Group B Exam - 200 Model Practice Sets</title>
+  <title>PostalExam Portal - LDCE Mock Tests & Prep Hub</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="navbar">
-    <h2>🇮🇳 Postal Services Group B Exam Portal</h2>
-    <div id="user-status" class="badge">Free User</div>
-  </header>
-
-  <main class="container">
-    
-    <!-- View 1: Test Dashboard -->
-    <section id="dashboard-view">
-      <div class="banner">
-        <h3>200 Model Practice Sets (Paper I & II)</h3>
-        <p>पहले 3 टेस्ट सभी के लिए <b>मुफ्त (Free)</b> हैं। सभी 200 सेट्स अनलॉक करने के लिए प्रीमियम लें।</p>
-      </div>
-
-      <div class="search-box">
-        <input type="text" id="search-input" placeholder="मॉडल पेपर खोजें (उदा: Paper 1, Paper 15)...">
-      </div>
-
-      <div id="test-grid" class="grid-container">
-        <!-- 200 Test Cards JavaScript se load honge -->
-      </div>
-    </section>
-
-    <!-- View 2: Quiz Practice Screen -->
-    <section id="quiz-view" class="hidden">
-      <div class="quiz-header">
-        <button id="exit-btn" class="btn-secondary">← Back to List</button>
-        <h4 id="quiz-title">Model Paper</h4>
-        <div id="timer" class="timer-badge">⏱ Time: 60:00</div>
-      </div>
-
-      <div class="quiz-body">
-        <div class="question-container">
-          <div id="q-number" class="q-number">Question 1 of 50</div>
-          <div id="q-text" class="q-text"></div>
-          <div id="options-list" class="options-container"></div>
-        </div>
-      </div>
-
-      <div class="quiz-footer">
-        <button id="prev-btn" class="btn-nav">Previous</button>
-        <button id="next-btn" class="btn-nav">Next</button>
-        <button id="submit-btn" class="btn-submit">Final Submit</button>
-      </div>
-    </section>
-
-    <!-- View 3: Result & Detailed Review Screen -->
-    <section id="result-view" class="hidden">
-      <div class="score-card">
-        <h3>🎉 Test Result Summary</h3>
-        <div class="score-metrics">
-          <div class="metric"><span id="res-score">0</span><label>Total Score</label></div>
-          <div class="metric"><span id="res-correct">0</span><label>Correct</label></div>
-          <div class="metric"><span id="res-wrong">0</span><label>Incorrect</label></div>
-          <div class="metric"><span id="res-accuracy">0%</span><label>Accuracy</label></div>
-        </div>
-        <button id="restart-btn" class="btn-primary">Back to Dashboard</button>
-      </div>
-
-      <div class="answers-review">
-        <h3>Detailed Answers & Explanations</h3>
-        <div id="review-list"></div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Payment Modal for Locked Tests (Tests 4 to 200) -->
-  <div id="pay-modal" class="modal hidden">
-    <div class="modal-content">
-      <span id="close-modal" class="close">&times;</span>
-      <h3>🔒 Unlock All 200 Model Papers</h3>
-      <p>यह टेस्ट प्रीमियम उपयोगकर्ताओं के लिए है। 200 मॉडल पेपर्स की संपूर्ण प्रैक्टिस के लिए सदस्यता लें।</p>
-      
-      <div class="payment-box">
-        <p><b>Fee: ₹199/- (One Time Access)</b></p>
-        <p>UPI ID: <code>your-upi-id@okhicici</code></p>
-        <small>Payment करने के बाद WhatsApp पर स्क्रीनशॉट भेजें और अपना <b>Unlock Code</b> प्राप्त करें।</small>
-      </div>
-
-      <div class="key-input-section">
-        <input type="text" id="access-key-input" placeholder="Enter Access Key (उदा: PSGB2026)">
-        <button id="unlock-btn" class="btn-success">Activate Access</button>
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <span>🔔 <b>Update:</b> Updated for Inspector Posts Revised Syllabus (22.08.2025) & PS Gr B LDCE.</span>
+      <div class="top-links">
+        <a href="#disclaimer">Disclaimer</a>
+        <a href="#help">Helpdesk</a>
       </div>
     </div>
   </div>
+
+  <!-- Primary Navigation -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="brand-container" onclick="showView('view-home')">
+        <img src="Postalexam.png" alt="Postal Exam Logo" class="brand-logo" onerror="this.style.display='none'">
+        <div class="brand-text">
+          <span class="brand-title">POSTAL<b>EXAM</b></span>
+          <span class="brand-tagline">LDCE Excellence & Preparation Portal</span>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <button class="nav-btn" onclick="showView('view-home')">Home</button>
+        <button class="nav-btn" onclick="openExamHub('IPO')">Inspector Posts (IP)</button>
+        <button class="nav-btn" onclick="openExamHub('PSB')">PS Group 'B'</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= VIEW 1: HOME PAGE ================= -->
+  <main id="view-home" class="page-view">
+    
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <span class="hero-pill">Dedicated Postal Departmental Exam Portal</span>
+          <h1>Structured Preparation for Departmental LDCEs</h1>
+          <p>
+            Authentic, rule-referenced online practice platforms tailored for Postal Inspectors and Group 'B' aspirants. 
+            Detailed explanations with Postal Manuals, Acts, and Service Rules.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="openExamHub('IPO')">Explore Inspector Posts</button>
+            <button class="btn btn-outline" onclick="openExamHub('PSB')">Explore PS Group B</button>
+          </div>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric-card">
+            <h3>200</h3>
+            <p>Model Practice Sets per Cadre</p>
+          </div>
+          <div class="metric-card">
+            <h3>100%</h3>
+            <p>Rule Citations & Explanations</p>
+          </div>
+          <div class="metric-card">
+            <h3>3 Free</h3>
+            <p>Diagnostic Tests for All Aspirants</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Exam Selection Section -->
+    <section class="exam-select-section container">
+      <div class="section-heading">
+        <h2>Select Examination Portal</h2>
+        <p>Choose your target cadre to access tests, latest patterns, and downloadable syllabus</p>
+      </div>
+
+      <div class="exam-grid">
+        <!-- Exam Card 1: Inspector Posts -->
+        <div class="exam-card">
+          <div class="card-badge ip-badge">LDCE IP Cadre</div>
+          <h3>Inspector Posts (IP) Examination</h3>
+          <p class="exam-desc">
+            Based strictly on Revised 3-Paper Scheme (DoP Order 22.08.2025). Covers The Post Office Act 2023, BNSS 2023, DIGIPIN, IT 2.0, and Postal Manuals.
+          </p>
+          <ul class="exam-features">
+            <li>✔ Paper-I (125 MCQs / 250 Marks) & Paper-III (150 MCQs / 300 Marks)</li>
+            <li>✔ Paper-II Descriptive Guidance (Noting, Drafting & Charge Sheet)</li>
+            <li>✔ 3 Free Full-Length Diagnostic Papers</li>
+            <li>✔ Downloadable Official Syllabus & Pattern</li>
+          </ul>
+          <div class="card-actions">
+            <button class="btn btn-primary full-width" onclick="openExamHub('IPO')">Open Inspector Posts Portal →</button>
+          </div>
+        </div>
+
+        <!-- Exam Card 2: Postal Service Group B -->
+        <div class="exam-card">
+          <div class="card-badge psb-badge">LDCE Group B</div>
+          <h3>Postal Service Group 'B' Examination</h3>
+          <p class="exam-desc">
+            Designed for ASPs, Senior Postmasters, and Sub-Postmasters aiming for Postal Services Group B Administrative cadres.
+          </p>
+          <ul class="exam-features">
+            <li>✔ Paper I: Postal Operations, Manuals & Schemes</li>
+            <li>✔ Paper II: Establishment, CCS Rules, Financial Manuals & Acts</li>
+            <li>✔ 3 Free Diagnostic Sets + 197 Advanced Paid Practice Sets</li>
+            <li>✔ Instant Accuracy & Explanations with Rule References</li>
+          </ul>
+          <div class="card-actions">
+            <button class="btn btn-primary full-width" onclick="openExamHub('PSB')">Open PS Group B Portal →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform Highlights Section -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Standard Examination Environment</h2>
+          <p>Engineered to simulate actual departmental examination conditions</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="f-icon">⏱</div>
+            <h4>Real-Time Timed Tests</h4>
+            <p>Timed sections matching standard 2.5 and 3 hour constraints to build speed and accuracy.</p>
+          </div>
+          <div class="feature-item">
+            <div class="f-icon">📖</div>
+            <h4>Authoritative Explanations</h4>
+            <p>Every single question is backed by exact manual volumes, circular dates, and rule clauses.</p>
+          </div>
+          <div class="feature-item">
+            <div class="f-icon">🔒</div>
+            <h4>Transparent Pricing</h4>
+            <p>3 complete test papers free for all candidates. One-time low activation key fee for all 200 sets.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= VIEW 2: EXAM HUB (TESTS & SYLLABUS) ================= -->
+  <main id="view-exam-hub" class="page-view hidden">
+    <div class="container">
+      
+      <!-- Hub Breadcrumb & Navigation -->
+      <div class="hub-header">
+        <button class="btn btn-light" onclick="showView('view-home')">← Back to Portal Home</button>
+        <div class="hub-title-block">
+          <h2 id="hub-title">Inspector Posts Examination Portal</h2>
+          <span id="hub-subtitle" class="text-muted">Updated Pattern & 200 Practice Sets</span>
+        </div>
+        <div id="user-tier-badge" class="badge">Free Mode: 3 Sets Unlocked</div>
+      </div>
+
+      <!-- Hub Tab Controller -->
+      <div class="hub-tabs">
+        <button class="tab-btn active" id="tab-btn-tests" onclick="switchHubTab('tests')">📝 Practice Papers (200 Sets)</button>
+        <button class="tab-btn" id="tab-btn-syllabus" onclick="switchHubTab('syllabus')">📋 Official Syllabus & Pattern</button>
+      </div>
+
+      <!-- Tab Content 1: 200 Test Grid -->
+      <div id="hub-tab-tests" class="hub-tab-content">
+        <div class="filter-strip">
+          <input type="text" id="test-search" placeholder="Search test by name or paper number..." onkeyup="filterTests()">
+          <div class="quick-status">
+            <span>Tests 1 to 3: <strong class="text-success">Free Access</strong></span>
+            <span>Tests 4 to 200: <strong class="text-warning">Premium Pass Required</strong></span>
+          </div>
+        </div>
+
+        <div id="tests-grid" class="tests-grid">
+          <!-- 200 Test Cards will be rendered by app.js -->
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Syllabus & Print View -->
+      <div id="hub-tab-syllabus" class="hub-tab-content hidden">
+        <div class="syllabus-toolbar no-print">
+          <p class="text-muted">You can review, print, or save the complete syllabus as PDF with website header and footer citations.</p>
+          <button class="btn btn-primary" onclick="printSyllabus()">🖨 Print / Save Syllabus as PDF</button>
+        </div>
+
+        <div id="syllabus-document" class="printable-syllabus-sheet">
+          <!-- Printable Header (Displays only in print & syllabus view) -->
+          <div class="print-header">
+            <div class="print-brand">
+              <h3>POSTALEXAM PREPARATION PORTAL</h3>
+              <p class="site-link">https://saraswat-media.github.io/postal-exam-portal</p>
+            </div>
+            <div class="print-meta">
+              <span id="print-cadre-title">Departmental LDCE Examination</span>
+              <span class="print-date">Official Pattern & Syllabus Reference</span>
+            </div>
+          </div>
+
+          <div id="syllabus-body">
+            <!-- Dynamic Syllabus HTML injected by app.js based on selected cadre -->
+          </div>
+
+          <!-- Printable Footer -->
+          <div class="print-footer">
+            <p>Generated for study and reference from <b>PostalExam Portal</b> (https://saraswat-media.github.io/postal-exam-portal). Strictly for candidate preparation.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= VIEW 3: QUIZ PRACTICE SCREEN ================= -->
+  <main id="view-quiz" class="page-view hidden">
+    <div class="container quiz-wrapper">
+      <div class="quiz-nav-bar">
+        <button class="btn btn-light" onclick="exitQuiz()">← Exit Test</button>
+        <div class="quiz-info">
+          <h3 id="quiz-heading">Paper</h3>
+          <span id="quiz-cadre-tag" class="cadre-tag">Departmental Examination</span>
+        </div>
+        <div id="quiz-timer" class="timer-box">⏱ 00:00</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-card-header">
+          <span id="q-counter">Question 1 of 50</span>
+          <span class="marks-info">+2.0 Marks for Correct Answer</span>
+        </div>
+        <div id="q-text" class="question-statement"></div>
+        <div id="options-group" class="options-group"></div>
+      </div>
+
+      <div class="quiz-controls">
+        <button id="btn-prev" class="btn btn-secondary" onclick="navigateQuestion(-1)">Previous</button>
+        <button id="btn-next" class="btn btn-secondary" onclick="navigateQuestion(1)">Next</button>
+        <button id="btn-submit" class="btn btn-success" onclick="confirmSubmitQuiz()">Submit Test</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= VIEW 4: RESULT SCREEN ================= -->
+  <main id="view-result" class="page-view hidden">
+    <div class="container result-wrapper">
+      <div class="result-summary-card">
+        <h2>Practice Set Performance Summary</h2>
+        <p id="res-test-title" class="text-muted"></p>
+
+        <div class="result-stats">
+          <div class="stat-box">
+            <span id="res-score" class="stat-number">0</span>
+            <span class="stat-label">Marks Obtained</span>
+          </div>
+          <div class="stat-box">
+            <span id="res-correct" class="stat-number text-success">0</span>
+            <span class="stat-label">Correct</span>
+          </div>
+          <div class="stat-box">
+            <span id="res-wrong" class="stat-number text-danger">0</span>
+            <span class="stat-label">Incorrect</span>
+          </div>
+          <div class="stat-box">
+            <span id="res-accuracy" class="stat-number text-primary">0%</span>
+            <span class="stat-label">Accuracy</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="backToHub()">Back to Practice Sets</button>
+      </div>
+
+      <div class="review-section">
+        <h3>Detailed Answers, Solutions & Rule Citations</h3>
+        <div id="review-container" class="review-container"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Premium Unlock Modal for Tests 4 to 200 -->
+  <div id="unlock-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeUnlockModal()">&times;</button>
+      <div class="modal-header">
+        <span class="lock-icon">🔒</span>
+        <h3>Unlock All 200 Practice Sets</h3>
+        <p>You have accessed a premium test set (Tests 4 to 200).</p>
+      </div>
+
+      <div class="pricing-card">
+        <div class="price-val">₹199 <span>/ Lifetime Access</span></div>
+        <p>Access all 200 full-length practice sets with complete explanations & rule citations.</p>
+        <div class="upi-box">
+          <label>UPI Payment Address:</label>
+          <input type="text" value="yourupi@okhdfcbank" readonly id="upi-field">
+          <small>Make payment and send screenshot via WhatsApp to receive your <b>Passcode Key</b>.</small>
+        </div>
+      </div>
+
+      <div class="access-form">
+        <label for="access-key-input">Enter Your Activation Passcode:</label>
+        <input type="text" id="access-key-input" placeholder="e.g. POSTAL2026KEY">
+        <button class="btn btn-success full-width" onclick="verifyAccessKey()">Activate Complete Access</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Professional Platform Footer -->
+  <footer class="footer" id="disclaimer">
+    <div class="container footer-content">
+      <div class="footer-col brand-col">
+        <div class="footer-brand">
+          <img src="Postalexam.png" alt="Postal Exam Logo" class="brand-logo footer-logo" onerror="this.style.display='none'">
+          <h4>POSTALEXAM PREPARATION PORTAL</h4>
+        </div>
+        <p class="footer-desc">
+          An authentic online testing and digital learning platform designed specifically for Department of Posts personnel preparing for competitive departmental examinations (LDCE IP & PS Group B).
+        </p>
+      </div>
+
+      <div class="footer-col links-col">
+        <h5>Quick Access</h5>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="openExamHub('IPO')">Inspector Posts Portal</a></li>
+          <li><a href="javascript:void(0)" onclick="openExamHub('PSB')">PS Group B Portal</a></li>
+          <li><a href="javascript:void(0)" onclick="showView('view-home')">Home Dashboard</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col disclaimer-col">
+        <h5>Official Legal Disclaimer</h5>
+        <div class="disclaimer-text">
+          <p>
+            <b>Non-Affiliation Notice:</b> PostalExam is an independent, private educational and self-study practice portal. 
+            This portal is <b>NOT</b> affiliated with, sponsored by, or in any way officially connected to the Department of Posts (India Post), the Ministry of Communications, or any Government of India agency.
+          </p>
+          <p>
+            Official examination notices, recruitment rules, and schedules are issued exclusively by the Department of Posts through its official channels (indiapost.gov.in). Practice papers provided here are purely simulated mock questions curated for candidate practice.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container bottom-row">
+        <span>© 2026 PostalExam Portal. All rights reserved. Strictly for educational use.</span>
+        <span>URL: https://saraswat-media.github.io/postal-exam-portal</span>
+      </div>
+    </div>
+  </footer>
 
   <script src="app.js"></script>
 </body>
