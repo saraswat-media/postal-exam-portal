@@ -11,12 +11,12 @@
 </head>
 <body>
 
-  <!-- Primary Navigation (Mobile & Desktop) -->
+  <!-- Navigation Bar -->
   <header class="navbar">
     <div class="container nav-content">
       <div class="brand-container" onclick="showView('view-home')">
         <div class="brand-logo-wrapper">
-          <img src="Postalexam.png" alt="Postal Exam Portal Logo" class="brand-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback-text').style.display='flex';">
+          <img src="Postalexam.png" alt="Portal Logo" class="brand-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback-text').style.display='flex';">
           <div id="logo-fallback-text" class="logo-fallback-box" style="display: none;">📮</div>
         </div>
         <div class="brand-text">
@@ -29,6 +29,7 @@
         <button class="nav-btn" onclick="showView('view-home')">Home</button>
         <button class="nav-btn" onclick="openExamHub('IPO')">Inspector Posts (IP)</button>
         <button class="nav-btn" onclick="openExamHub('PSB')">PS Group 'B'</button>
+        <button class="nav-btn" onclick="openExamHub('AAO')">AAO (IP&TAFS)</button>
       </nav>
     </div>
   </header>
@@ -40,21 +41,21 @@
     <section class="hero-section">
       <div class="container hero-grid">
         <div class="hero-text">
-          <span class="hero-pill">Dedicated Postal Departmental Examination Platform</span>
-          <h1>Targeted Preparation for Postal LDCEs</h1>
+          <span class="hero-pill">Official Departmental LDCE Platform</span>
+          <h1>Targeted Preparation for Postal & Accounts LDCEs</h1>
           <p>
-            Authentic, rule-referenced online practice platforms tailored for Inspector Posts and Postal Service Group 'B' aspirants. 
-            All mock questions are backed by Postal Manuals, Acts, Guidelines, and Service Rules.
+            Authentic, rule-referenced online practice platforms tailored for Inspector Posts, Postal Service Group 'B', and Assistant Accounts Officer (AAO) aspirants.
           </p>
           <div class="hero-actions">
-            <button class="btn btn-primary" onclick="openExamHub('IPO')">Inspector Posts Portal →</button>
-            <button class="btn btn-outline" onclick="openExamHub('PSB')">PS Group B Portal →</button>
+            <button class="btn btn-primary" onclick="openExamHub('IPO')">Inspector Posts (IP) →</button>
+            <button class="btn btn-secondary" onclick="openExamHub('PSB')">PS Group 'B' →</button>
+            <button class="btn btn-outline" onclick="openExamHub('AAO')">AAO (IP&TAFS) →</button>
           </div>
         </div>
         <div class="hero-metrics">
           <div class="metric-card">
-            <h3>200</h3>
-            <p>Model Sets per Cadre</p>
+            <h3>3</h3>
+            <p>Targeted Cadres (IP, PSB, AAO)</p>
           </div>
           <div class="metric-card">
             <h3>100 Qs</h3>
@@ -62,13 +63,13 @@
           </div>
           <div class="metric-card">
             <h3>3 Sets</h3>
-            <p>100% Free Practice</p>
+            <p>100% Free Practice per Cadre</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Main Exam Selection Section -->
+    <!-- Exam Selection Cards -->
     <section class="exam-select-section container">
       <div class="section-heading">
         <h2>Select Examination Portal</h2>
@@ -76,25 +77,25 @@
       </div>
 
       <div class="exam-grid">
-        <!-- Exam Card 1: Inspector Posts -->
+        <!-- Card 1: Inspector Posts -->
         <div class="exam-card">
           <div class="card-badge ip-badge">LDCE Inspector Posts</div>
           <h3>Inspector Posts (IP) Examination</h3>
           <p class="exam-desc">
-            Structured strictly as per Directorate Revised Pattern (dated 22.08.2025). Covers The Post Office Act 2023, BNSS 2023, DIGIPIN, IT 2.0, and Postal Manuals.
+            Structured strictly as per Directorate Revised Pattern (22.08.2025). Covers The Post Office Act 2023, BNSS 2023, DIGIPIN, IT 2.0, and Postal Manuals.
           </p>
           <ul class="exam-features">
             <li>✔ Paper-I (125 MCQs / 250 Marks) & Paper-III (150 MCQs / 300 Marks)</li>
             <li>✔ Paper-II Descriptive Guidance (Noting, Drafting & Charge Sheet)</li>
             <li>✔ Tests 1, 2, 3 Free Practice (100 Unique Questions Each)</li>
-            <li>✔ Full Eligibility Norms & Detailed Printable Syllabus</li>
+            <li>✔ Official Eligibility Matrix & Printable Syllabus</li>
           </ul>
           <div class="card-actions">
             <button class="btn btn-primary full-width" onclick="openExamHub('IPO')">Enter Inspector Posts Portal →</button>
           </div>
         </div>
 
-        <!-- Exam Card 2: Postal Service Group B -->
+        <!-- Card 2: Postal Service Group B -->
         <div class="exam-card">
           <div class="card-badge psb-badge">LDCE PS Group B</div>
           <h3>Postal Service Group 'B' Examination</h3>
@@ -111,21 +112,39 @@
             <button class="btn btn-primary full-width" onclick="openExamHub('PSB')">Enter PS Group B Portal →</button>
           </div>
         </div>
+
+        <!-- Card 3: Assistant Accounts Officer (AAO) -->
+        <div class="exam-card">
+          <div class="card-badge aao-badge">LDCE AAO (IP&TAFS)</div>
+          <h3>Assistant Accounts Officer (AAO)</h3>
+          <p class="exam-desc">
+            For DoP & DoT Group 'C' officials aspiring for promotion to Assistant Accounts Officer in IP&TAFS Group 'B' Cadre (Pay Level-8).
+          </p>
+          <ul class="exam-features">
+            <li>✔ Comprehensive 6-Paper Scheme (Financial Rules, Service Rules, Postal & Telecom Accounts, IT)</li>
+            <li>✔ Covers GFR 2017, FHB I & II, Book-Keeping, GAR 1990, FR-SR, Pension 2021, AGR & SUC</li>
+            <li>✔ Tests 1, 2, 3 Free Practice (100 Unique Questions Each)</li>
+            <li>✔ Official Recruitment Rules 2018 Feeder Eligibility & Printable Syllabus</li>
+          </ul>
+          <div class="card-actions">
+            <button class="btn btn-primary full-width" onclick="openExamHub('AAO')">Enter AAO Portal →</button>
+          </div>
+        </div>
       </div>
 
-      <!-- Amazon Affiliate Showcase Card -->
+      <!-- Amazon Affiliate Card -->
       <div class="affiliate-banner-card">
         <div class="affiliate-content">
           <div class="affiliate-badge">Recommended Study Material</div>
           <h3>Standard Reference Books & Bare Acts (Swamy's & Departmental Guides)</h3>
           <p>
             Equip your preparation with standard hardbound reference materials, including 
-            <b>Swamy’s PO Guide Part I</b>, Postal Manuals, GFR, and CCS Rulebooks directly on Amazon.
+            <b>Swamy’s PO Guide Part I</b>, Postal Manuals, FHB, GFR 2017, and CCS Rulebooks directly on Amazon.
           </p>
           <div class="affiliate-perks">
             <span>📖 Authentic Publications</span>
             <span>🚚 Quick Delivery via Amazon</span>
-            <span>📦 Complete Syllabus Reference</span>
+            <span>📦 IP, PS Gr B & AAO Syllabus Reference</span>
           </div>
         </div>
         <div class="affiliate-action">
@@ -146,7 +165,7 @@
   <main id="view-exam-hub" class="page-view hidden">
     <div class="container">
       
-      <!-- Hub Breadcrumb & Navigation -->
+      <!-- Hub Header -->
       <div class="hub-header">
         <button class="btn btn-light" onclick="showView('view-home')">← Back to Portal Home</button>
         <div class="hub-title-block">
@@ -156,7 +175,7 @@
         <div id="user-tier-badge" class="badge">Free Mode: 3 Sets Unlocked</div>
       </div>
 
-      <!-- Hub Tab Controller -->
+      <!-- Hub Tabs -->
       <div class="hub-tabs">
         <button class="tab-btn active" id="tab-btn-tests" onclick="switchHubTab('tests')">📝 Practice Papers (200 Sets)</button>
         <button class="tab-btn" id="tab-btn-eligibility" onclick="switchHubTab('eligibility')">🎓 Cadre Eligibility Details</button>
@@ -167,7 +186,7 @@
       <div class="hub-book-strip no-print">
         <div class="hub-book-text">
           <strong>📚 Need Physical Reference Books for this Syllabus?</strong>
-          <span>Get Swamy's PO Guide Part 1, Postal Manuals, and CCS Rules on Amazon.</span>
+          <span>Get Swamy's Compilations, Postal Accounts Manual, GFR 2017, and CCS Rules on Amazon.</span>
         </div>
         <a href="https://www.amazon.in/s?k=po+guide+part+1+swamy&crid=BATK77KEQ5XN&sprefix=Po+guide%2Caps%2C398&linkCode=ll2&tag=wwwfbcomrsara-21&linkId=6fc5eaa66391a01eb7eb0408caab2411&ref_=as_li_ss_tl" 
            target="_blank" 
@@ -187,16 +206,12 @@
           </div>
         </div>
 
-        <div id="tests-grid" class="tests-grid">
-          <!-- 200 Cards rendered by JS -->
-        </div>
+        <div id="tests-grid" class="tests-grid"></div>
       </div>
 
       <!-- Tab Content 2: Eligibility Criteria -->
       <div id="hub-tab-eligibility" class="hub-tab-content hidden">
-        <div class="doc-card" id="eligibility-content">
-          <!-- Rendered by app.js -->
-        </div>
+        <div class="doc-card" id="eligibility-content"></div>
       </div>
 
       <!-- Tab Content 3: Syllabus & Print View -->
@@ -223,9 +238,7 @@
             </div>
           </div>
 
-          <div id="syllabus-body">
-            <!-- Full syllabus injected by JS -->
-          </div>
+          <div id="syllabus-body"></div>
 
           <div class="print-footer">
             <p>Official Pattern & Syllabus reference generated via <b>Postal Exam Portal</b> for candidate preparation.</p>
@@ -332,7 +345,7 @@
     </div>
   </div>
 
-  <!-- Professional Platform Footer with Collapsible Sections -->
+  <!-- Professional Footer -->
   <footer class="footer">
     <div class="container footer-accordions">
       
@@ -347,7 +360,7 @@
         </button>
         <div class="footer-acc-body">
           <p>
-            <b>POSTAL EXAM PORTAL</b> is an authentic online testing and digital learning platform designed specifically for Department of Posts personnel preparing for competitive departmental examinations (LDCE IP & PS Group B). It features simulated mock tests, detailed rule-based explanations, and updated syllabus repositories.
+            <b>POSTAL EXAM PORTAL</b> is an authentic online testing and digital learning platform designed specifically for Department of Posts and Department of Telecommunications personnel preparing for competitive departmental examinations (LDCE IP, PS Group B, and AAO IP&TAFS). It features simulated mock tests, detailed rule-based explanations, and updated syllabus repositories.
           </p>
         </div>
       </div>
@@ -362,12 +375,13 @@
           <ul class="footer-links-list">
             <li><a href="javascript:void(0)" onclick="openExamHub('IPO')">Inspector Posts (IP) Portal</a></li>
             <li><a href="javascript:void(0)" onclick="openExamHub('PSB')">Postal Service Group 'B' Portal</a></li>
+            <li><a href="javascript:void(0)" onclick="openExamHub('AAO')">Assistant Accounts Officer (AAO) Portal</a></li>
             <li><a href="javascript:void(0)" onclick="showView('view-home')">Home Dashboard</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- Accordion 3: Official Legal Disclaimer -->
+      <!-- Accordion 3: Legal Disclaimer -->
       <div class="footer-acc-item">
         <button class="footer-acc-header" onclick="toggleFooterAcc(this)">
           <span>Official Legal Disclaimer</span>
@@ -377,10 +391,10 @@
           <div class="disclaimer-text">
             <p>
               <b>Non-Affiliation Notice:</b> Postal Exam Portal is an independent, private educational and self-study practice platform. 
-              This portal is <b>NOT</b> affiliated with, sponsored by, or in any way officially connected to the Department of Posts (India Post), the Ministry of Communications, or any Government of India agency.
+              This portal is <b>NOT</b> affiliated with, sponsored by, or in any way officially connected to the Department of Posts (India Post), Department of Telecommunications (DoT), the Ministry of Communications, or any Government of India agency.
             </p>
             <p>
-              Official examination notices, eligibility determinations, recruitment rules, and dates are issued exclusively by the Department of Posts through its official website (indiapost.gov.in). Practice papers provided here are purely simulated mock questions curated for candidate revision and study purposes.
+              Official examination notices, eligibility determinations, recruitment rules, and dates are issued exclusively by the Department of Posts and Department of Telecommunications through official websites (indiapost.gov.in / cgca.gov.in).
             </p>
           </div>
         </div>
