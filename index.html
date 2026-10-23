@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PS Group B Exam - 200 Model Practice Sets</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <h2>🇮🇳 Postal Services Group B Exam Portal</h2>
+    <div id="user-status" class="badge">Free User</div>
+  </header>
+
+  <main class="container">
+    
+    <!-- View 1: Test Dashboard -->
+    <section id="dashboard-view">
+      <div class="banner">
+        <h3>200 Model Practice Sets (Paper I & II)</h3>
+        <p>पहले 3 टेस्ट सभी के लिए <b>मुफ्त (Free)</b> हैं। सभी 200 सेट्स अनलॉक करने के लिए प्रीमियम लें।</p>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="मॉडल पेपर खोजें (उदा: Paper 1, Paper 15)...">
+      </div>
+
+      <div id="test-grid" class="grid-container">
+        <!-- 200 Test Cards JavaScript se load honge -->
+      </div>
+    </section>
+
+    <!-- View 2: Quiz Practice Screen -->
+    <section id="quiz-view" class="hidden">
+      <div class="quiz-header">
+        <button id="exit-btn" class="btn-secondary">← Back to List</button>
+        <h4 id="quiz-title">Model Paper</h4>
+        <div id="timer" class="timer-badge">⏱ Time: 60:00</div>
+      </div>
+
+      <div class="quiz-body">
+        <div class="question-container">
+          <div id="q-number" class="q-number">Question 1 of 50</div>
+          <div id="q-text" class="q-text"></div>
+          <div id="options-list" class="options-container"></div>
+        </div>
+      </div>
+
+      <div class="quiz-footer">
+        <button id="prev-btn" class="btn-nav">Previous</button>
+        <button id="next-btn" class="btn-nav">Next</button>
+        <button id="submit-btn" class="btn-submit">Final Submit</button>
+      </div>
+    </section>
+
+    <!-- View 3: Result & Detailed Review Screen -->
+    <section id="result-view" class="hidden">
+      <div class="score-card">
+        <h3>🎉 Test Result Summary</h3>
+        <div class="score-metrics">
+          <div class="metric"><span id="res-score">0</span><label>Total Score</label></div>
+          <div class="metric"><span id="res-correct">0</span><label>Correct</label></div>
+          <div class="metric"><span id="res-wrong">0</span><label>Incorrect</label></div>
+          <div class="metric"><span id="res-accuracy">0%</span><label>Accuracy</label></div>
+        </div>
+        <button id="restart-btn" class="btn-primary">Back to Dashboard</button>
+      </div>
+
+      <div class="answers-review">
+        <h3>Detailed Answers & Explanations</h3>
+        <div id="review-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Payment Modal for Locked Tests (Tests 4 to 200) -->
+  <div id="pay-modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <h3>🔒 Unlock All 200 Model Papers</h3>
+      <p>यह टेस्ट प्रीमियम उपयोगकर्ताओं के लिए है। 200 मॉडल पेपर्स की संपूर्ण प्रैक्टिस के लिए सदस्यता लें।</p>
+      
+      <div class="payment-box">
+        <p><b>Fee: ₹199/- (One Time Access)</b></p>
+        <p>UPI ID: <code>your-upi-id@okhicici</code></p>
+        <small>Payment करने के बाद WhatsApp पर स्क्रीनशॉट भेजें और अपना <b>Unlock Code</b> प्राप्त करें।</small>
+      </div>
+
+      <div class="key-input-section">
+        <input type="text" id="access-key-input" placeholder="Enter Access Key (उदा: PSGB2026)">
+        <button id="unlock-btn" class="btn-success">Activate Access</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
