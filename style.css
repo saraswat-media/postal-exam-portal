@@ -1,3 +1,4 @@
+/* Core Color Palette & Variables */
 :root {
   --primary: #1034a6;
   --primary-dark: #091f63;
@@ -55,21 +56,22 @@ a { text-decoration: none; color: inherit; }
 .metric-card h3 { font-size: 26px; font-weight: 800; color: var(--primary); }
 .metric-card p { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 5px; }
 
-/* 3-Exam Cards Grid */
+/* 4-Exam Cards Grid */
 .exam-select-section { padding: 50px 20px; }
 .section-heading { text-align: center; margin-bottom: 35px; }
 .section-heading h2 { font-size: 26px; font-weight: 800; color: var(--secondary); }
 .section-heading p { color: var(--text-muted); font-size: 14px; margin-top: 6px; }
-.exam-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-.exam-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; display: flex; flex-direction: column; }
+.exam-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.exam-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 26px; display: flex; flex-direction: column; }
 .card-badge { display: inline-block; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; margin-bottom: 15px; align-self: flex-start; }
 .ip-badge { background: #eff6ff; color: #1d4ed8; }
 .psb-badge { background: #fef3c7; color: #b45309; }
 .aao-badge { background: #f3e8ff; color: #7e22ce; }
-.exam-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
-.exam-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 18px; }
+.pasa-badge { background: #dcfce7; color: #166534; }
+.exam-card h3 { font-size: 19px; font-weight: 700; margin-bottom: 10px; }
+.exam-desc { font-size: 13.5px; color: var(--text-muted); margin-bottom: 18px; }
 .exam-features { list-style: none; margin-bottom: 25px; flex-grow: 1; }
-.exam-features li { font-size: 13.5px; padding: 6px 0; color: #334155; }
+.exam-features li { font-size: 13px; padding: 5px 0; color: #334155; }
 
 /* Affiliate Banner */
 .affiliate-banner-card {
@@ -204,19 +206,24 @@ a { text-decoration: none; color: inherit; }
   .brand-logo { height: 38px !important; }
   .brand-title { font-size: 17px !important; line-height: 1.2; }
   .brand-tagline { font-size: 9.5px !important; }
+
   .nav-links { width: 100%; display: flex !important; overflow-x: auto; white-space: nowrap; gap: 8px; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
   .nav-btn { background: #f1f5f9; border: 1px solid var(--border); padding: 6px 12px !important; font-size: 13px !important; border-radius: 6px; flex-shrink: 0; }
+
   .hero-grid, .exam-grid { grid-template-columns: 1fr; }
   .hero-metrics { grid-template-columns: 1fr; }
   .affiliate-banner-card { flex-direction: column; align-items: flex-start; padding: 20px; gap: 20px; }
   .affiliate-action { width: 100%; align-items: stretch; }
   .btn-amazon { justify-content: center; width: 100%; }
+
   .hub-book-strip { flex-direction: column; align-items: flex-start; padding: 15px; }
   .btn-hub-amazon { width: 100%; text-align: center; }
+
   .hub-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; padding-top: 15px !important; }
   .hub-title-block h2 { font-size: 19px !important; }
   .hub-tabs { display: flex; overflow-x: auto; white-space: nowrap; gap: 5px; }
   .tab-btn { padding: 10px 14px !important; font-size: 13px !important; flex-shrink: 0; }
+
   .doc-card, .printable-syllabus-sheet { padding: 18px !important; }
   .syllabus-table { min-width: 550px; }
   .bottom-row { flex-direction: column; gap: 8px; text-align: center; }
