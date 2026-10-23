@@ -1,13 +1,13 @@
 // State Management
 const STATE = {
-  currentCadre: "IPO",
+  currentCadre: "IPO", // 'IPO', 'PSB', or 'AAO'
   isUnlocked: localStorage.getItem("postal_exam_premium") === "true",
   currentTestId: null,
   activeQuestions: [],
   userSelections: {},
   currentQIndex: 0,
   timerInterval: null,
-  secondsLeft: 7200, // 120 Minutes for 100 Questions
+  secondsLeft: 7200, // 120 Minutes
   unlockPasscode: "POSTAL999PASS"
 };
 
@@ -18,7 +18,7 @@ function showView(viewId) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// 2. Open Selected Exam Hub
+// 2. Open Selected Exam Hub (IP, PSB, or AAO)
 function openExamHub(cadre) {
   STATE.currentCadre = cadre;
   showView("view-exam-hub");
@@ -31,10 +31,14 @@ function openExamHub(cadre) {
     hubTitle.innerText = "Inspector Posts (IP) Examination Portal";
     hubSubtitle.innerText = "Based on Directorate Revised Scheme (22.08.2025) — 200 Practice Sets";
     printCadre.innerText = "Inspector Posts Examination (LDCE Revised Syllabus)";
-  } else {
+  } else if (cadre === "PSB") {
     hubTitle.innerText = "Postal Service Group 'B' Examination Portal";
     hubSubtitle.innerText = "LDCE Postal Services Group 'B' Administrative Cadre — 200 Practice Sets";
     printCadre.innerText = "Postal Service Group 'B' Examination (LDCE)";
+  } else if (cadre === "AAO") {
+    hubTitle.innerText = "Assistant Accounts Officer (AAO) Portal";
+    hubSubtitle.innerText = "LDCE for IP&TAFS Group 'B' (DoP & DoT) — 200 Practice Sets";
+    printCadre.innerText = "Assistant Accounts Officer (AAO) LDCE Examination (IP&TAFS Group B)";
   }
 
   updateTierBadge();
@@ -94,9 +98,14 @@ function renderTestGrid() {
     card.className = `test-card ${canAccess ? "unlocked" : "locked"}`;
     card.setAttribute("data-test-name", `Test Paper ${i}`);
 
-    let label = STATE.currentCadre === "IPO" 
-      ? (i === 1 ? "Paper-I (Postal Acts, POSB, Manuals & Tech)" : (i === 2 ? "Paper-III (Service Rules, Acts & Aptitude)" : (i === 3 ? "Paper-I & III (Grand Departmental Mock)" : `Specialized Practice Set #${i}`)))
-      : (i === 1 ? "Paper-I (Postal Operations & Manuals V, VI, VII)" : (i === 2 ? "Paper-II (Finance, Accounts, FHB & GFR 2017)" : (i === 3 ? "Paper-I & II (Grand Administrative Mock)" : `Administrative Mock Set #${i}`)));
+    let label = "";
+    if (STATE.currentCadre === "IPO") {
+      label = i === 1 ? "Paper-I (Postal Acts, POSB, Manuals & Tech)" : (i === 2 ? "Paper-III (Service Rules, Acts & Aptitude)" : (i === 3 ? "Paper-I & III (Grand Departmental Mock)" : `Specialized Practice Set #${i}`));
+    } else if (STATE.currentCadre === "PSB") {
+      label = i === 1 ? "Paper-I (Postal Operations & Manuals V, VI, VII)" : (i === 2 ? "Paper-II (Finance, Accounts, FHB & GFR 2017)" : (i === 3 ? "Paper-I & II (Grand Administrative Mock)" : `Administrative Mock Set #${i}`));
+    } else if (STATE.currentCadre === "AAO") {
+      label = i === 1 ? "Paper-I (Financial Rules, GFR 2017 & Book-Keeping)" : (i === 2 ? "Paper-II (Service Rules, FR-SR & Pension 2021)" : (i === 3 ? "Paper-III & IV (Postal & Telecom Accounts / Taxation)" : `AAO Accounts Practice Set #${i}`));
+    }
 
     card.innerHTML = `
       <div>
@@ -135,7 +144,6 @@ async function startPracticeTest(testId) {
   STATE.userSelections = {};
   STATE.currentQIndex = 0;
 
-  // Pehle check karein agar local JSON file exist karti ho
   let loadedQuestions = null;
   try {
     const filename = `${STATE.currentCadre.toLowerCase()}_test_${testId}.json`;
@@ -147,10 +155,9 @@ async function startPracticeTest(testId) {
       }
     }
   } catch (e) {
-    // Local JSON fetch error fallback to internal 100-Q engine
+    // Fallback to internal engine
   }
 
-  // Agar external JSON nahi mila, to authentic 100-Q engine se alag-alag paper build karein
   if (!loadedQuestions) {
     loadedQuestions = buildAuthentic100Paper(STATE.currentCadre, testId);
   }
@@ -158,8 +165,9 @@ async function startPracticeTest(testId) {
   STATE.activeQuestions = loadedQuestions;
 
   showView("view-quiz");
-  document.getElementById("quiz-heading").innerText = `${STATE.currentCadre === "IPO" ? "Inspector Posts" : "PS Group B"} — Model Paper #${testId}`;
-  document.getElementById("quiz-cadre-tag").innerText = STATE.currentCadre === "IPO" ? "100 Questions (200 Marks) — Revised Scheme" : "100 Questions (200 Marks) — LDCE Standard";
+  let cadreName = STATE.currentCadre === "IPO" ? "Inspector Posts" : (STATE.currentCadre === "PSB" ? "PS Group B" : "AAO (IP&TAFS)");
+  document.getElementById("quiz-heading").innerText = `${cadreName} — Model Paper #${testId}`;
+  document.getElementById("quiz-cadre-tag").innerText = "100 Questions (200 Marks) — LDCE Standard";
 
   STATE.secondsLeft = 120 * 60; // 120 Minutes
   startTimer();
@@ -260,8 +268,9 @@ function finishQuiz() {
   const marks = correct * 2;
   const maxMarks = total * 2;
   const acc = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+  let cadreName = STATE.currentCadre === "IPO" ? "Inspector Posts" : (STATE.currentCadre === "PSB" ? "PS Group B" : "AAO (IP&TAFS)");
 
-  document.getElementById("res-test-title").innerText = `${STATE.currentCadre === "IPO" ? "Inspector Posts" : "PS Group B"} — Model Paper #${STATE.currentTestId}`;
+  document.getElementById("res-test-title").innerText = `${cadreName} — Model Paper #${STATE.currentTestId}`;
   document.getElementById("res-score").innerText = `${marks} / ${maxMarks}`;
   document.getElementById("res-correct").innerText = `${correct} Questions (${marks} Marks)`;
   document.getElementById("res-wrong").innerText = `${wrong} Questions`;
@@ -272,7 +281,7 @@ function backToHub() {
   showView("view-exam-hub");
 }
 
-// 6. Eligibility Content (Department of Posts Norms)
+// 6. Eligibility Content (Department of Posts & DoT Norms)
 function renderEligibilityContent() {
   const el = document.getElementById("eligibility-content");
   if (!el) return;
@@ -309,7 +318,7 @@ function renderEligibilityContent() {
         </table>
       </div>
     `;
-  } else {
+  } else if (STATE.currentCadre === "PSB") {
     el.innerHTML = `
       <div style="margin-bottom: 15px;">
         <h3 style="color: var(--secondary); font-size: 19px;">Eligibility Criteria: Postal Service Group 'B' LDCE</h3>
@@ -341,10 +350,67 @@ function renderEligibilityContent() {
         </table>
       </div>
     `;
+  } else if (STATE.currentCadre === "AAO") {
+    el.innerHTML = `
+      <div style="margin-bottom: 15px;">
+        <h3 style="color: var(--secondary); font-size: 19px;">Eligibility Criteria: Assistant Accounts Officer (AAO) LDCE</h3>
+        <p class="text-muted" style="font-size: 13px;">Governed by Indian Posts and Telecommunications Accounts and Finance Service Group 'B' (AAO) Recruitment Rules, 2018 (Gazette GSR 320(E)):</p>
+      </div>
+      
+      <div class="table-responsive-wrapper">
+        <table class="syllabus-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">Feeder Cadre / Level</th>
+              <th style="width: 20%;">Pre-revised GP</th>
+              <th style="width: 28%;">Designation</th>
+              <th>Required Regular Service</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Level 4</b></td>
+              <td>Rs. 2,400/-</td>
+              <td>Postal Assistant (PA) / Sorting Assistant (SA)</td>
+              <td><b>9 Years</b> of regular qualifying service</td>
+            </tr>
+            <tr>
+              <td><b>Level 3</b></td>
+              <td>Rs. 2,000/-</td>
+              <td>Postman / Mail Guard</td>
+              <td><b>11 Years</b> of regular qualifying service</td>
+            </tr>
+            <tr>
+              <td><b>Level 1</b></td>
+              <td>Rs. 1,800/-</td>
+              <td>Multi-Tasking Staff (MTS Group C)</td>
+              <td><b>14 Years</b> of regular qualifying service</td>
+            </tr>
+            <tr>
+              <td><b>Level 5 & 6</b></td>
+              <td>Rs. 2,800 / 4,200/-</td>
+              <td>Junior Accountant / Senior Accountant</td>
+              <td>Level 5: 6 Years / Level 6: 3 Years</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; font-size: 13.5px; line-height: 1.6;">
+        <p><b>Key Conditions & Guidelines:</b></p>
+        <ul style="padding-left: 20px; margin-top: 6px;">
+          <li><b>Educational Qualification:</b> Bachelor’s Degree from a recognized University or Institute is mandatory for all applicants.</li>
+          <li><b>Eligible Departments:</b> Regular Group 'C' employees of the Department of Posts (DoP) and Department of Telecommunications (DoT) under the Ministry of Communications.</li>
+          <li><b>Group B Ineligibility:</b> Only Group 'C' officials are eligible to appear. Officials already working substantively in Group 'B' are not eligible.</li>
+          <li><b>Crucial Cut-off Date:</b> 1st day of January of the respective Vacancy Year.</li>
+          <li><b>Qualifying Marks:</b> 40% in each individual paper for General category; 30% in each individual paper for SC/ST category.</li>
+        </ul>
+      </div>
+    `;
   }
 }
 
-// 7. Complete Detailed Syllabus Content
+// 7. Complete Detailed Syllabus Content (All 3 Cadres)
 function renderSyllabusContent() {
   const el = document.getElementById("syllabus-body");
   if (!el) return;
@@ -368,38 +434,39 @@ function renderSyllabusContent() {
               <td><b>Paper-I</b></td>
               <td>125 MCQs<br>250 Marks<br>Duration: 2.5 Hrs</td>
               <td>
-                <b>1. Acts:</b> The Post Office Act, 2023 (Act No. 43 of 2023); Government Savings Promotion Act, 1873; Prevention of Money Laundering Act, 2002 (AML/CFT); Consumer Protection Act, 2019; Information Technology Act, 2000.<br>
-                <b>2. Rules & Schemes:</b> The Post Office Rules, 2024 & The Post Office Regulations, 2024; Government Savings Promotion Rules, 2018; POSA Scheme 2019, RD Scheme 2019, TD Scheme 2019, MIS Scheme 2019, SCSS 2019, NSC (VIII Issue) 2019, KVP 2019, PPF Scheme 2019, Sukanya Samriddhi Scheme 2019.<br>
-                <b>3. Insurance:</b> Post Office Life Insurance Scheme, 2011 & amendments compiled as SANKALAN.<br>
-                <b>4. Postal Manuals:</b> Book of BO Rules; Postal Manual Vol II, Vol III, Vol IV (Leave, Pension, Gratuities, Examinations, Establishment norms), Vol VIII, Vol V (except App-1), Vol VI (Part I Ch-1, Part II, Part III), Vol VII.<br>
-                <b>5. Postal Operations & Tech:</b> PO Guide Part-I & Part-II (except Sec VII & VIII); DIGIPIN (Digital Personal Identification Number); MNOP, PNOP, Policy on Centralized Delivery; Dak Ghar Niryat Kendras (DNKs); Consolidation of Products; POSB Manuals Vol I, II, III; POSB CBS Manual; IT 2.0 (APT), CBS, PLI-CIS, IPPB, Preservation & Disposal of Records.<br>
-                <b>6. Conduct & Service Rules:</b> CCS (Conduct) Rules 1964; CCS (CCA) Rules 1965; CCS (Temporary Service) Rules 1965; GDS (Conduct & Engagement) Rules 2020.
+                <b>1. Acts:</b> The Post Office Act, 2023; Government Savings Promotion Act, 1873; Prevention of Money Laundering Act, 2002; Consumer Protection Act, 2019; Information Technology Act, 2000.<br>
+                <b>2. Rules & Schemes:</b> Post Office Rules & Regulations 2024; Government Savings Promotion Rules, 2018; All Small Savings Schemes 2019 (POSA, RD, TD, MIS, SCSS, NSC, KVP, PPF, SSA); SANKALAN (PLI/RPLI Rules).<br>
+                <b>3. Postal Manuals:</b> Book of BO Rules; Postal Manuals Vol II, III, IV, VIII; Vol V, VI (Parts I, II, III), Vol VII.<br>
+                <b>4. Operations & Modern Tech:</b> PO Guide I & II; DIGIPIN; MNOP, PNOP, Centralized Delivery, DNKs; IT 2.0 (APT), CBS, PLI-CIS, IPPB.<br>
+                <b>5. Conduct & Service Rules:</b> CCS (Conduct) Rules 1964; CCS (CCA) Rules 1965; CCS (Temp Service) Rules; GDS (Conduct & Engagement) Rules 2020.
               </td>
             </tr>
             <tr>
               <td><b>Paper-II</b></td>
               <td>Descriptive<br>50 Marks<br>Duration: 1.0 Hr</td>
               <td>
-                • <b>Noting:</b> Official noting on a given administrative / postal situation in approx. 200 words (15 Marks).<br>
-                • <b>Drafting:</b> Official communication (Letter, OM, Order) in approx. 200 words (15 Marks).<br>
-                • <b>Charge Sheet Formulation:</b> Drafting of Major Penalty Charge Sheet under Rule 14 of CCS (CCA) Rules, 1965 (Articles of Charge, Statement of Imputations, List of Documents & Witnesses) (20 Marks).
+                • Noting in approx. 200 words (15 Marks).<br>
+                • Drafting in approx. 200 words (15 Marks).<br>
+                • Drafting of Major Penalty Charge Sheet under Rule 14 of CCS (CCA) Rules, 1965 (20 Marks).
               </td>
             </tr>
             <tr>
               <td><b>Paper-III</b></td>
               <td>150 MCQs<br>300 Marks<br>Duration: 3.0 Hrs</td>
               <td>
-                <b>1. Legal & Constitutional:</b> Constitution of India (Preamble, Fundamental Rights, DPSP, Duties, Articles 124-147, 214-232, 311, 338, 338a, 338b); Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS - Sec 1, 2, 84); CAT Act 1985; Revenue Recovery Act 1890; Prevention of Corruption Act 1988; RTI Act 2005 & Rules 2012; POSH Act 2013.<br>
-                <b>2. Financial & Procurement:</b> Manual on Procurement of Goods, Works, Consultancy; General Financial Rules, 2017 (Chapters 2 & 6); Schedule of Financial Powers of Divisional Heads and Heads of Circle; P&T FHB Vol I and Postal FHB Vol II.<br>
-                <b>3. Service & Pension Rules:</b> Fundamental Rules (FR) & Supplementary Rules (SR); CCS (GPF) Rules 1961; CCS (Pension) Rules 2021; CCS (Commutation of Pension) Rules 1981; Central Civil Services (NPS) Rules 2021 & Gratuity under NPS Rules 2021; SDBS 2010; Maintenance of APAR; Casual Labourers guidelines; Staff Welfare Measures.<br>
-                <b>4. Aptitude & General Knowledge:</b> English Language; Current Affairs (Economy, Polity, Sports, Culture, Science); Reasoning, Mental Aptitude, Interpersonal Skills & Ethics.
+                • Constitution of India (Preamble, Fundamental Rights/Duties, DPSP, Judiciary, Art 311, 338).<br>
+                • Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS - Sec 1, 2, 84).<br>
+                • CAT Act 1985; Revenue Recovery Act 1890; Prevention of Corruption Act 1988; RTI Act 2005.<br>
+                • Procurement Manuals (Goods, Works, Services); GFR 2017 (Ch 2 & 6); FR-SR; P&T FHB Vol I & II.<br>
+                • CCS (Pension) Rules 2021; NPS Rules 2021; CCS (Commutation) Rules 1981; POSH Act 2013.<br>
+                • English Language, Current Affairs, Reasoning, Mental Aptitude & Ethics.
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     `;
-  } else {
+  } else if (STATE.currentCadre === "PSB") {
     el.innerHTML = `
       <h3 style="margin-bottom: 8px;">Detailed Scheme & Syllabus: Postal Service Group 'B'</h3>
       <p class="text-muted" style="margin-bottom: 20px;">Prescribed Syllabus for Limited Departmental Competitive Examination.</p>
@@ -421,11 +488,10 @@ function renderSyllabusContent() {
                 • Post Office Guide Part-I & Part-II (Inland & Foreign Post Rules).<br>
                 • Postal Manual Volume V (Mail Operations and Air Mail Regulations).<br>
                 • Postal Manual Volume VI (Part I, II, III) and Volume VII.<br>
-                • Post Office Savings Bank (POSB) Manuals Vol I, II, III; Government Savings Promotion Rules 2018; All Small Savings Schemes 2019.<br>
+                • Post Office Savings Bank (POSB) Manuals Vol I, II, III; Small Savings Schemes 2019.<br>
                 • Core Banking Solutions (CBS) Guidelines and Directorate SB Orders.<br>
                 • Postal Life Insurance (PLI) & Rural Postal Life Insurance (RPLI) guidelines.<br>
-                • IT Modernization Project 2.0 (APT), Parcel Network Optimization Project (PNOP), Mail Network Optimization Project (MNOP), IPPB services.<br>
-                • Consumer Protection Act 2019 as applicable to postal services.
+                • IT Modernization Project 2.0 (APT), Parcel Network (PNOP), Mail Network (MNOP), IPPB.
               </td>
             </tr>
             <tr>
@@ -438,8 +504,82 @@ function renderSyllabusContent() {
                 • Central Civil Services (Conduct) Rules, 1964.<br>
                 • Central Civil Services (Classification, Control & Appeal) Rules, 1965.<br>
                 • CCS (Leave) Rules, 1972; CCS (Pension) Rules, 2021; National Pension System (NPS).<br>
-                • Central Administrative Tribunal Act, 1985; Right to Information (RTI) Act, 2005.<br>
-                • Official Disciplinary, Vigilance, Inquiries and Staff Establishment Norms.
+                • Central Administrative Tribunal Act, 1985; Right to Information (RTI) Act, 2005.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else if (STATE.currentCadre === "AAO") {
+    el.innerHTML = `
+      <h3 style="margin-bottom: 8px;">Detailed Scheme & Syllabus: Assistant Accounts Officer (AAO) LDCE</h3>
+      <p class="text-muted" style="margin-bottom: 20px;">IP&TAFS Group 'B' Cadre Scheme (6 Comprehensive Papers - 600 Total Marks).</p>
+
+      <div class="table-responsive-wrapper">
+        <table class="syllabus-table">
+          <thead>
+            <tr>
+              <th style="width: 12%;">Paper</th>
+              <th style="width: 22%;">Subject & Duration</th>
+              <th>Detailed Syllabus Topics & References</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Paper-I</b></td>
+              <td>Financial Rules, Procedures & Book-Keeping<br>100 Marks (3.0 Hrs)</td>
+              <td>
+                • <b>Part A (Compulsory Practical):</b> Double Entry Book-Keeping, Journal, Ledger, Trial Balance, Cash Book, Bank Reconciliation Statement (BRS), Trading and P&L Account, Balance Sheet, Adjustments (Depreciation, Bad debts, Reserves).<br>
+                • <b>Part B:</b> General Financial Rules (GFR), 2017 (Procurement through GeM, Advances, Contracts, Budgeting) & P&T Financial Handbook Volume-I.<br>
+                • <b>Part C:</b> Government Accounting Rules (GAR), 1990; Principles of Government Accounts, Consolidated Fund, Contingency Fund, Public Account.
+              </td>
+            </tr>
+            <tr>
+              <td><b>Paper-II</b></td>
+              <td>Service Rules<br>100 Marks (3.0 Hrs)</td>
+              <td>
+                • <b>Part A (Compulsory Numerical Problem):</b> Practical calculations on Pay Fixation, Pension, Commutation, Gratuity, Family Pension, or GPF interest calculation.<br>
+                • <b>Part B:</b> Fundamental Rules & Supplementary Rules (FR & SR - I, II, III), CCS (Joining Time) Rules 1979, CCS (Pension) Rules 2021, National Pension System (NPS), CCS (Leave) Rules 1972, CCS (GPF) Rules 1960, Children Education Allowance (CEA), LTC Rules 1988.<br>
+                • <b>Part C:</b> CCS (CCA) Rules 1965, CCS (Conduct) Rules 1964, RTI Act 2005, Prevention of Corruption Act 1988, Constitution of India (Articles 14, 21, 22, 32, 226, 311).
+              </td>
+            </tr>
+            <tr>
+              <td><b>Paper-III</b></td>
+              <td>Postal Accounts<br>100 Marks (3.0 Hrs)</td>
+              <td>
+                • <b>Postal Accounts Manual (Vol I & II):</b> Compilation of Accounts, Remittances, Transfer Entries, Head Office and Sub Office Accounting, Postmaster's Balance Sheet.<br>
+                • <b>Financial Powers:</b> Delegation of Financial Power Rules (DFPR), 2024 and Postal Schedule of Financial Powers (CPMG, PMG, SSPOs/SPOs).<br>
+                • <b>Audit & Internal Checks:</b> Manual of Internal Audit Questionnaire (Postal & RMS Units, Stores Depot, Civil & Electrical Wings).<br>
+                • <b>Postal Schemes & Services:</b> POSB Accounts, CBS, Postal Life Insurance (PLI/RPLI), IPPB Accounting, GST in Postal Operations.
+              </td>
+            </tr>
+            <tr>
+              <td><b>Paper-IV</b></td>
+              <td>Telecom Accounts, USOF & Taxation<br>100 Marks (3.0 Hrs)</td>
+              <td>
+                • <b>License Agreements & SUC:</b> Financial conditions of Telecom License Agreements (UL, UASL, ISP), Spectrum Usage Charges, Reconciliation of AGR and P&L.<br>
+                • <b>Telecom Reforms 2021:</b> Gross Revenue (GR), Applicable Gross Revenue (ApGR), Adjusted Gross Revenue (AGR), Financial & Performance Bank Guarantees (FBG/PBG).<br>
+                • <b>Universal Service Obligation Fund (USOF):</b> Sponsored schemes, BharatNet Phase I & II, agreements.<br>
+                • <b>Goods & Services Tax (GST):</b> Registration, Input Tax Credit (ITC), Reverse Charge Mechanism (RCM), Returns.<br>
+                • <b>Income Tax Act, 1961:</b> Salary deductions, TDS (Section 192, 206AA), Form 16, Form 24Q, Chapter VI-A deductions (80C, 80D, 80DD, 80U, 80GG), AIS & Form 26AS.
+              </td>
+            </tr>
+            <tr>
+              <td><b>Paper-V</b></td>
+              <td>Logical, Analytical, Quantitative & Language Skills<br>100 Marks (3.0 Hrs)</td>
+              <td>
+                • <b>Part A (25 MCQs - 50 Marks):</b> Data Interpretation (Tables, Graphs, Pie Charts), Quantitative Ability (Percentages, Ratios, Profit & Loss, SI & CI, Averages, Time & Work).<br>
+                • <b>Part B Section 1 (15 MCQs - 30 Marks):</b> Verbal & Reading Abilities (English or Hindi option), Grammar, Vocabulary, Error Spotting, Idioms.<br>
+                • <b>Part B Section 2 (Subjective - 20 Marks):</b> Précis Writing, Official Letter Drafting to CGCA/DoT, Office Note/Proposal preparation.
+              </td>
+            </tr>
+            <tr>
+              <td><b>Paper-VI</b></td>
+              <td>Information Technology (Theory & Practical)<br>100 Marks (3.0 Hrs)</td>
+              <td>
+                • <b>Part A (15 MCQs - 30 Marks):</b> Windows OS, File Management, Control Panel, Internet, Cyber Security basics.<br>
+                • <b>Part B (Practical - 70 Marks):</b> Advanced Microsoft Excel (30 Marks - Formulas, Functions, Lookup, Pivot, Accounting application), Microsoft Word (20 Marks - Document creation, Table formatting, Mail Merge), PowerPoint (20 Marks - Slide design, Animations, Charts).
               </td>
             </tr>
           </tbody>
@@ -485,14 +625,13 @@ function toggleFooterAcc(btn) {
   item.classList.toggle("open");
 }
 
-// 11. Authentic 100 Unique Questions Builder Engine
+// 11. Authentic 100 Unique Questions Builder Engine (IP, PSB & AAO)
 function buildAuthentic100Paper(cadre, testId) {
   let masterPool = [];
 
-  // ================= IPO QUESTION POOLS (REVISED SYLLABUS DATED 22.08.2025) =================
+  // ================= IPO QUESTION POOLS (REVISED SYLLABUS) =================
   if (cadre === "IPO") {
     if (testId === 1) {
-      // IPO Paper 1 Special: Acts, Schemes, Manuals, Tech, Conduct & CCA
       masterPool = [
         { q: "Under The Post Office Act, 2023, which authority is empowered to frame rules regarding the interception, detention, or opening of postal articles?", opts: ["Director General Postal Services", "Central Government", "Chief Postmaster General of Circle", "District Magistrate"], c: 1, e: "Section 9 of The Post Office Act, 2023 empowers the Central Government for interception on grounds of State security." },
         { q: "The Post Office Act, 2023 repealed which colonial-era enactment?", opts: ["Indian Post Office Act, 1898", "Government Savings Bank Act, 1873", "Post Office Cash Certificates Act, 1917", "Indian Telegraph Act, 1885"], c: 0, e: "The Post Office Act, 2023 repealed the Indian Post Office Act, 1898 (Act 6 of 1898)." },
@@ -503,48 +642,22 @@ function buildAuthentic100Paper(cadre, testId) {
         { q: "What is the maximum weight permissible for a Book Packet containing printed books?", opts: ["2 kg", "4 kg", "5 kg", "10 kg"], c: 2, e: "Under PO Guide Part I, the maximum weight of a Book Packet containing periodicals/books is 5 kg." },
         { q: "Under CCS (CCA) Rules, 1965, a Major Penalty charge sheet is issued under which Rule?", opts: ["Rule 11", "Rule 14", "Rule 16", "Rule 19"], c: 1, e: "Major penalty proceedings are conducted strictly under Rule 14 of CCS (CCA) Rules, 1965." },
         { q: "Under CCS (Conduct) Rules, 1964, which rule deals with prohibition of sexual harassment of working women?", opts: ["Rule 3", "Rule 3-B", "Rule 3-C", "Rule 4"], c: 2, e: "Rule 3-C of CCS (Conduct) Rules, 1964 explicitly prohibits sexual harassment." },
-        { q: "What is the compilation of Post Office Life Insurance Rules and amendments officially named?", opts: ["DAK SEVA", "SANKALAN", "PARICAY", "SAMARTHAN"], c: 1, e: "DoP compiled all PLI/RPLI rules and amendments into the publication titled 'SANKALAN'." },
-        { q: "What is the maximum sum assured permissible under Postal Life Insurance (PLI) for an individual?", opts: ["₹20 Lakh", "₹50 Lakh", "₹10 Lakh", "₹1 Crore"], c: 1, e: "The maximum aggregate sum assured allowed under PLI is ₹50 Lakh." },
-        { q: "What is the minimum amount required to open a Post Office Savings Account (POSA)?", opts: ["₹100", "₹500", "₹1000", "₹50"], c: 1, e: "As per POSA Scheme 2019, the minimum opening deposit is ₹500." },
-        { q: "Under Postal Manual Vol V, what does the term 'Trial Card' denote?", opts: ["Form M-26 used to test mail transit time", "Service card for new postmen", "Attendance record card", "Sorting bag label"], c: 0, e: "Trial cards (Form M-26) are dispatched to locate mail transit delays." },
-        { q: "Under Postal Manual Vol VIII, what is the preservation period of a Head Office Cash Book?", opts: ["5 years", "10 years", "Permanently", "3 years"], c: 2, e: "Under Postal Manual Vol VIII, Head Office Cash Books must be preserved permanently." },
-        { q: "What is the maximum limit of deposit in a National Savings Monthly Income Account (MIS) single account?", opts: ["₹4.5 Lakh", "₹9 Lakh", "₹15 Lakh", "₹10 Lakh"], c: 1, e: "The maximum limit for single MIS account is ₹9 Lakh (₹15 Lakh for joint account)." },
-        { q: "Under Book of BO Rules, who is responsible for the overall custody of cash and stamps in a Branch Office?", opts: ["ABPM", "Branch Postmaster (BPM)", "Mail Overseer", "Inspector Posts"], c: 1, e: "Branch Postmaster is primarily responsible for the custody of cash, stamps, and records in BO." },
-        { q: "Under Postal Manual Vol VI Part I, which register records complaints received against postal staff?", opts: ["Error Book", "Register of Complaints and Suggestions", "Order Book", "Guard Book"], c: 1, e: "Complaints and suggestions are maintained in the designated Complaint Register." },
-        { q: "In the IT Modernisation Project 2.0, what does APT stand for?", opts: ["Advanced Postal Technology", "Applied Postal Training", "Automated Postal Transmission", "All Postal Transformation"], c: 0, e: "APT stands for Advanced Postal Technology under IT Modernisation 2.0." },
-        { q: "What is the maximum sum assured allowed under Rural Postal Life Insurance (RPLI)?", opts: ["₹5 Lakh", "₹10 Lakh", "₹20 Lakh", "₹2 Lakh"], c: 1, e: "The maximum sum assured limit under RPLI is ₹10 Lakh." },
-        { q: "Under CCS (Temporary Service) Rules, 1965, the services of a temporary Government servant can be terminated under:", opts: ["Rule 5(1)", "Rule 10", "Rule 14", "Rule 16"], c: 0, e: "Rule 5(1) provides for notice of termination of temporary service." }
+        { q: "What is the compilation of Post Office Life Insurance Rules and amendments officially named?", opts: ["DAK SEVA", "SANKALAN", "PARICAY", "SAMARTHAN"], c: 1, e: "DoP compiled all PLI/RPLI rules and amendments into the publication titled 'SANKALAN'." }
       ];
     } else if (testId === 2) {
-      // IPO Paper 3 Special: BNSS 2023, Constitution, Procurement, Pension 2021, Accounts, Aptitude
       masterPool = [
         { q: "Under the Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS), which section provides for proclamation for a person absconding?", opts: ["Section 82", "Section 84", "Section 85", "Section 91"], c: 1, e: "Section 84 of BNSS, 2023 corresponds to the proclamation of absconding persons." },
         { q: "Which article of the Constitution of India provides constitutional safeguards against dismissal or removal of civil servants?", opts: ["Article 309", "Article 310", "Article 311", "Article 312"], c: 2, e: "Article 311 provides safeguards against dismissal, removal, or reduction in rank without inquiry." },
         { q: "What is the time limit for filing a first appeal under Section 19(1) of the RTI Act, 2005?", opts: ["15 days", "30 days", "45 days", "60 days"], c: 1, e: "First appeal must be filed within 30 days from receipt of the decision." },
         { q: "What is the minimum period of notice required for voluntary retirement under Rule 43 of CCS (Pension) Rules, 2021?", opts: ["1 month", "2 months", "3 months", "6 months"], c: 2, e: "A government servant must give a notice of not less than 3 months in writing." },
         { q: "Under General Financial Rules (GFR), 2017, direct purchase of goods without quotation is permitted up to:", opts: ["₹10,000", "₹25,000", "₹50,000", "₹1,00,000"], c: 1, e: "Rule 154 of GFR 2017 allows direct purchase without quotation up to ₹25,000 on each occasion." },
-        { q: "Under CCS (Commutation of Pension) Rules, 1981, what is the maximum percentage of pension that can be commuted?", opts: ["33.33%", "40%", "50%", "45%"], c: 1, e: "A government servant can commute up to a maximum of 40% of their pension." },
-        { q: "Which section of the Prevention of Corruption Act, 1988 deals with criminal misconduct by a public servant?", opts: ["Section 7", "Section 11", "Section 13", "Section 17"], c: 2, e: "Section 13 of the PC Act deals with criminal misconduct by a public servant." },
-        { q: "Under Central Administrative Tribunal Act, 1985, what is the limitation period for filing an application before the Tribunal?", opts: ["6 months", "1 year", "2 years", "90 days"], c: 1, e: "Section 21 of CAT Act prescribes an ordinary limitation period of 1 year." },
-        { q: "In Post Office accounting, Financial Handbook (FHB) Volume I deals primarily with:", opts: ["General Financial & Accounts Rules", "Postal Savings Bank Accounts", "Cash remittance in BOs", "Mail contracts"], c: 0, e: "P&T FHB Vol I deals with General Financial & Accounts Rules of the Department." },
-        { q: "Under Fundamental Rule (FR) 56(j), the appropriate authority has the absolute right to retire a government servant:", opts: ["After 15 years", "In the public interest by giving 3 months notice", "Only upon medical invalidation", "Upon completion of 40 years of age"], c: 1, e: "FR 56(j) allows compulsory retirement in public interest with 3 months notice/pay in lieu." },
-        { q: "What is the maximum ceiling of Retirement Gratuity under CCS (Pension) Rules, 2021?", opts: ["₹10 Lakh", "₹15 Lakh", "₹20 Lakh", "₹25 Lakh"], c: 2, e: "The maximum limit is ₹20 Lakh (which increases by 25% when DA rises by 50%)." },
-        { q: "Under GeM (Government e-Marketplace), procurement of goods through bidding is mandatory above:", opts: ["₹1 Lakh", "₹5 Lakh", "₹10 Lakh", "₹2.5 Lakh"], c: 1, e: "As per GeM guidelines, purchases above ₹5 Lakh require online bidding or reverse auction." },
-        { q: "Under the Constitution of India, which Article empowers High Courts to issue writs?", opts: ["Article 32", "Article 136", "Article 226", "Article 311"], c: 2, e: "Article 226 empowers High Courts to issue writs for the enforcement of fundamental and legal rights." },
-        { q: "Under CCS (GPF) Rules, 1961, what is the maximum percentage of GPF balance that can be withdrawn for house construction?", opts: ["50%", "75%", "90%", "60%"], c: 2, e: "Up to 90% of the amount standing at credit may be withdrawn for housing purposes." },
-        { q: "What is the penal interest rate applied under the Revenue Recovery Act, 1890 for defaulting revenue?", opts: ["Simple interest as determined by Collector", "Compound 12%", "Fixed 18%", "Nil"], c: 0, e: "Arrears are recovered as land revenue as certified by the Collector under the Act." }
+        { q: "Under CCS (Commutation of Pension) Rules, 1981, what is the maximum percentage of pension that can be commuted?", opts: ["33.33%", "40%", "50%", "45%"], c: 1, e: "A government servant can commute up to a maximum of 40% of their pension." }
       ];
     } else {
-      // IPO Paper 3 / Grand Mock: Comprehensive All-Topic Mix
       masterPool = [
         { q: "Under Postal Manual Vol II, which chapter deals with Appeals and Petitions?", opts: ["Chapter I", "Chapter III", "Chapter V", "Chapter VII"], c: 1, e: "Chapter III of Postal Manual Vol II deals with Appeals and Petitions." },
-        { q: "Under Postal Manual Vol III, what is the nature of records to be preserved in the Divisional Superintendent's office?", opts: ["Only staff files", "Establishment, Inspections, and Crime/Loss cases", "Mail abstracts", "Counter receipts"], c: 1, e: "Postal Manual Vol III prescribes records relating to establishment, inspections, and loss inquiries." },
         { q: "Under Post Office Rules, 2024, what is the rule regarding the disposal of undelivered postal articles?", opts: ["Returned to RLO (Returned Letter Office)", "Destroyed immediately", "Auctioned within 24 hours", "Delivered to local police"], c: 0, e: "Undelivered articles with incomplete addresses are sent to the Returned Letter Office (RLO)." },
-        { q: "What is the minimum lock-in period for Public Provident Fund (PPF) partial withdrawals?", opts: ["3 years", "5 years", "7th financial year", "10 years"], c: 2, e: "Partial withdrawals under PPF Scheme 2019 are permissible from the 7th financial year onward." },
-        { q: "Under MNOP (Mail Network Optimization Project), what is the function of an NSH?", opts: ["National Sorting Hub for Speed Post", "Network Sorting Hall for Parcels", "National Savings House", "New Speed Post Hub"], c: 0, e: "NSH stands for National Sorting Hub dedicated to automated processing of Speed Post." },
-        { q: "Under Dak Ghar Niryat Kendras (DNKs), commercial exporters are provided:", opts: ["Customs clearance assistance and paperless booking", "Free air freight", "Unlimited weight parcels", "Cash subsidies"], c: 0, e: "DNK allows small commercial exporters to file postal export declarations digitally." },
-        { q: "Under CCS (CCA) Rules, 1965, who is the appellate authority against an order of penalty passed by a Superintendent of Post Offices?", opts: ["Director General", "Director of Postal Services / PMG", "Postmaster General only", "Central Administrative Tribunal"], c: 1, e: "DPS or Postmaster General is the designated appellate authority for orders passed by Divisional Heads." },
-        { q: "Under CCS (Conduct) Rules, 1964, what is the monetary limit above which a Group B officer must report a gift received from personal friends?", opts: ["₹1,500", "₹5,000", "₹10,000", "₹2,500"], c: 1, e: "Rule 13 prescribes a ₹5,000 reporting threshold for Group B officials receiving gifts from friends." }
+        { q: "What is the minimum lock-in period for Public Provident Fund (PPF) partial withdrawals?", opts: ["3 years", "5 years", "7th financial year", "10 years"], c: 2, e: "Partial withdrawals under PPF Scheme 2019 are permissible from the 7th financial year onward." }
       ];
     }
   }
@@ -552,45 +665,73 @@ function buildAuthentic100Paper(cadre, testId) {
   // ================= PS GROUP B QUESTION POOLS =================
   if (cadre === "PSB") {
     if (testId === 1) {
-      // PSB Paper 1 Special: Postal Operations, PO Guide I & II, Manuals V, VI, VII, POSB & PLI
       masterPool = [
         { q: "Under PO Guide Part I, what is the maximum weight limit for a registered inland parcel booked at a Branch Post Office?", opts: ["20 kg", "10 kg", "4 kg", "5 kg"], c: 1, e: "Maximum weight of a parcel for or from a Branch Post Office is 10 kg (20 kg for departmental offices)." },
         { q: "What is the maximum weight permissible for a Blind Literature Packet exempt from postage?", opts: ["2 kg", "5 kg", "7 kg", "10 kg"], c: 2, e: "Blind Literature packets are exempt from postage up to a maximum limit of 7 kg." },
         { q: "Under Postal Manual Vol V, what is an 'Air Stage'?", opts: ["An airport sorting station", "A postal route over which mails are conveyed by air", "A flight crew mail compartment", "A temporary landing strip"], c: 1, e: "Rule 8 defines Air Stage as a route over which mails are carried by air." },
         { q: "Under Postal Manual Vol VI Part II, what is the validity of an Indian Postal Order (IPO)?", opts: ["1 year from last day of month of issue", "2 years", "6 months", "3 years"], c: 1, e: "An Indian Postal Order is payable within 24 months from the last day of the month of issue." },
-        { q: "Under Postal Manual Vol VII, what is the register maintained by the Record Officer to note attendance and workpapers of RMS sections?", opts: ["Section Register", "Trip Journal", "Work-Paper Portfolio", "Daily Report"], c: 1, e: "Trip Journals are scrutinized by the Record Officer to check section attendance and duties." },
-        { q: "Under POSB CBS Manual, what is the maximum amount of cash withdrawal permitted in a Branch Office per account per day without sanction?", opts: ["₹5,000", "₹10,000", "₹20,000", "₹50,000"], c: 2, e: "BPM can pay up to ₹20,000 in cash per day per account without obtaining prior authorization." },
-        { q: "What is the maximum investment limit in the Sukanya Samriddhi Account (SSA) in a financial year?", opts: ["₹1 Lakh", "₹1.5 Lakh", "₹2 Lakh", "No limit"], c: 1, e: "Maximum limit of deposit in SSA is ₹1.5 Lakh in a financial year." },
-        { q: "Under PLI Guidelines, loan can be granted on an Endowment Assurance (Santosh) policy after completion of:", opts: ["1 year", "2 years", "3 years", "5 years"], c: 2, e: "Loan is admissible after 3 years on Endowment Assurance and Whole Life policies." },
-        { q: "Under Postal Manual Vol V, what is an 'Exceptional Mail Bag'?", opts: ["A bag containing insured items", "A bag containing only registered parcels", "A bag made up only when there is mail to send", "An emergency mail bag"], c: 2, e: "Exceptional bag is closed only when articles are actually available for dispatch." },
-        { q: "What is the fee charged for registration of an inland postal article?", opts: ["₹17", "₹20", "₹22", "₹15"], c: 0, e: "Standard inland registration fee is ₹17 per article." }
+        { q: "Under POSB CBS Manual, what is the maximum amount of cash withdrawal permitted in a Branch Office per account per day without sanction?", opts: ["₹5,000", "₹10,000", "₹20,000", "₹50,000"], c: 2, e: "BPM can pay up to ₹20,000 in cash per day per account without obtaining prior authorization." }
       ];
     } else if (testId === 2) {
-      // PSB Paper 2 Special: Finance, Accounts, FHB, GFR, CCS Rules, Vigilance
       masterPool = [
         { q: "Under Postal FHB Volume II, what is the schedule of verification of Sub-Office balances by the Divisional Superintendent?", opts: ["Once a year", "Twice a year", "During annual inspection", "Quarterly"], c: 2, e: "Superintendent verifies balances of SOs during annual administrative inspections." },
         { q: "Under GFR 2017, what is the maximum period of validity of a Performance Security?", opts: ["60 days beyond completion of contractual obligations", "30 days", "90 days", "1 year"], c: 0, e: "Rule 170 of GFR 2017 specifies 60 days beyond completion of all contractual obligations." },
-        { q: "Under Fundamental Rule (FR) 22(I)(a)(1), pay fixation on promotion involves:", opts: ["One notional increment and placing at next higher cell", "Two increments", "Direct placement without increment", "10% hike"], c: 0, e: "FR 22 provides one notional increment in feeder level and fitting into the higher pay level cell." },
-        { q: "Under Schedule of Financial Powers of Divisional Heads, what is the power of a Senior Superintendent to sanction minor office repairs?", opts: ["₹10,000 per annum", "₹50,000 per annum", "Full powers within budget", "₹25,000 per occasion"], c: 2, e: "Divisional heads exercise enhanced financial powers within budget allotments." },
         { q: "Under CCS (Leave) Rules, 1972, what is the maximum number of days of Earned Leave that can be accumulated?", opts: ["240 days", "300 days", "360 days", "Unlimited"], c: 1, e: "Rule 26 limits the maximum accumulation of Earned Leave to 300 days." },
-        { q: "Under CCS (CCA) Rules, 1965, what is the time limit for an Inquiry Officer to submit the inquiry report?", opts: ["3 months from appointment", "6 months", "1 month", "1 year"], c: 1, e: "DoPT guidelines prescribe that inquiry should ordinarily be concluded within 6 months." },
-        { q: "Under CCS (Conduct) Rules, 1964, what is the restriction on employment of near relatives of government servants in private firms?", opts: ["Permitted with PMG sanction", "Must report or obtain prior sanction of Government", "Strictly prohibited", "No restriction"], c: 1, e: "Rule 4 requires prior sanction or report when near relatives accept employment in private firms having official dealings." },
-        { q: "Under P&T FHB Vol I, how is an unadjusted loss due to fraud or embezzlement accounted for initially?", opts: ["Written off to dead stock", "Debited to 'Losses of Postal Money/Stores'", "Paid by Postmaster personally", "Adjusted in Misc deposit"], c: 1, e: "Embezzled amounts are debited to suspense/losses head pending recovery." }
+        { q: "Under CCS (Conduct) Rules, 1964, what is the restriction on employment of near relatives of government servants in private firms?", opts: ["Permitted with PMG sanction", "Must report or obtain prior sanction of Government", "Strictly prohibited", "No restriction"], c: 1, e: "Rule 4 requires prior sanction or report when near relatives accept employment in private firms having official dealings." }
       ];
     } else {
-      // PSB Paper 3 / Grand Mock: Comprehensive Administrative & Operational Mix
       masterPool = [
         { q: "Under Postal Manual Vol II, what is the procedure when counterfeit currency is detected in post office remittances?", opts: ["Return to sender", "Impound and report to police with FIR", "Destroy immediately", "Credit to Govt accounts"], c: 1, e: "Counterfeit notes must be branded, impounded, and handed over to police as per Manual Vol II." },
         { q: "What is the maximum limit of an ordinary Money Order that can be remitted through an eMO?", opts: ["₹5,000", "₹10,000", "₹20,000", "₹50,000"], c: 0, e: "Maximum value of a single electronic money order (eMO) is ₹5,000." },
-        { q: "Under CCS (Pension) Rules, 2021, minimum qualifying service required to become eligible for service pension is:", opts: ["5 years", "10 years", "20 years", "15 years"], c: 1, e: "Rule 44 specifies minimum 10 years of qualifying service for service pension." },
-        { q: "Under Consumer Protection Act, 2019, District Consumer Disputes Redressal Commission has jurisdiction up to:", opts: ["₹20 Lakh", "₹50 Lakh", "₹1 Crore", "₹2 Crore"], c: 1, e: "District Commission entertains claims where consideration does not exceed ₹50 Lakh." },
-        { q: "Under Postal Manual Vol IV, what is the crucial qualifying service for promotion under MACP Scheme?", opts: ["10, 20, 30 years", "8, 16, 24 years", "12, 24, 36 years", "7, 14, 21 years"], c: 0, e: "MACP scheme grants financial upgrades on completion of 10, 20, and 30 years of regular service." },
-        { q: "Under RTI Act, 2005, what is the maximum penalty that can be imposed on a CPIO under Section 20?", opts: ["₹10,000", "₹25,000", "₹50,000", "₹5,000"], c: 1, e: "Section 20 imposes ₹250 per day up to a maximum ceiling of ₹25,000." }
+        { q: "Under CCS (Pension) Rules, 2021, minimum qualifying service required to become eligible for service pension is:", opts: ["5 years", "10 years", "20 years", "15 years"], c: 1, e: "Rule 44 specifies minimum 10 years of qualifying service for service pension." }
       ];
     }
   }
 
-  // Exact 100 Unique Questions Assemble Karna
+  // ================= AAO QUESTION POOLS (IP&TAFS GROUP B) =================
+  if (cadre === "AAO") {
+    if (testId === 1) {
+      // AAO Paper 1 Special: GFR 2017, FHB Vol I, Book-Keeping, Trial Balance, BRS & GAR 1990
+      masterPool = [
+        { q: "Under Government Accounting Rules (GAR), 1990, in how many main parts are government accounts maintained?", opts: ["Two parts", "Three parts (Consolidated Fund, Contingency Fund & Public Account)", "Four parts", "Five parts"], c: 1, e: "Rule 14 of GAR 1990 divides Government accounts into Consolidated Fund, Contingency Fund, and Public Account." },
+        { q: "Under General Financial Rules (GFR), 2017, what is the enhanced threshold limit for direct purchase of goods without quotation?", opts: ["₹10,000", "₹25,000", "₹50,000", "₹1,00,000"], c: 1, e: "Rule 154 of GFR 2017 allows direct purchase of goods without inviting quotations up to ₹25,000 on each occasion." },
+        { q: "In Double Entry Book-Keeping, which of the following errors is NOT disclosed by a Trial Balance?", opts: ["Wrong posting in one account", "Compensating errors", "Mathematical error in casting", "Posting on wrong side of an account"], c: 1, e: "Compensating errors neutralize each other and therefore do not affect the agreement of Trial Balance totals." },
+        { q: "Under P&T FHB Volume-I, what is a 'Last Pay Certificate' (LPC) primarily used for?", opts: ["For annual increment", "To transfer an official from one audit circle/disbursing officer to another", "For sanction of GPF advance", "For claiming medical reimbursement"], c: 1, e: "LPC provides details of last pay drawn, deductions, and recoveries when an official is transferred between disbursing officers." },
+        { q: "When preparing a Bank Reconciliation Statement starting with Cash Book balance, cheques issued but not yet presented for payment are:", opts: ["Added", "Deducted", "Ignored", "Divided by two"], c: 0, e: "Cheques issued reduce Cash Book balance; since bank has not yet debited, they are added back to reconcile with Pass Book." },
+        { q: "Under GFR 2017, what is the maximum limit for purchase of goods through a Local Purchase Committee under Rule 155?", opts: ["₹1 Lakh", "₹2.5 Lakh", "₹5 Lakh", "₹10 Lakh"], c: 1, e: "Rule 155 allows purchase of goods up to ₹2,50,000 on each occasion on the recommendations of a Local Purchase Committee." },
+        { q: "Under GAR 1990, which Major Head denotes the receipts and expenditure relating to Postal Services?", opts: ["Major Head 2052", "Major Head 3201 (Postal Services)", "Major Head 2054", "Major Head 3451"], c: 1, e: "Major Head 3201 in the list of Major and Minor Heads represents Postal Services Revenue Expenditure." },
+        { q: "In accounting, the concept of 'Standards of Financial Propriety' is enshrined in which rule of GFR 2017?", opts: ["Rule 10", "Rule 21", "Rule 35", "Rule 48"], c: 1, e: "Rule 21 of GFR 2017 outlines the fundamental Standards of Financial Propriety expected from every government officer." },
+        { q: "Under P&T FHB Vol I, what is the period within which an unadjusted advance given to a subordinate office must be settled?", opts: ["1 month", "3 months", "Immediately upon conclusion of work or within specified financial year", "6 months"], c: 2, e: "Advances must be watched and adjusted immediately upon conclusion of the transaction as per FHB rules." },
+        { q: "What type of account is 'Outstanding Liabilities' / 'Rent Payable' in commercial accounting?", opts: ["Real Account", "Nominal Account", "Representative Personal Account", "Valuation Account"], c: 2, e: "Rent payable represents amounts due to individuals/entities, classifying it as a Representative Personal Account." }
+      ];
+    } else if (testId === 2) {
+      // AAO Paper 2 Special: Service Rules, FR-SR, CCS Pension Rules 2021, GPF, LTC & CCA Rules
+      masterPool = [
+        { q: "Under CCS (Pension) Rules, 2021, what is the enhanced maximum ceiling of Retirement / Death Gratuity with effect from 01.01.2024?", opts: ["₹20 Lakh", "₹25 Lakh", "₹30 Lakh", "₹50 Lakh"], c: 1, e: "The maximum gratuity limit was enhanced to ₹25 Lakh when Dearness Allowance crossed 50% in 2024." },
+        { q: "Under FR 22(I)(a)(1), what is the procedure for pay fixation upon promotion to a post carrying higher responsibilities?", opts: ["One notional increment given in lower level and fitted into next equal or higher cell of promotional level", "Two increments", "Direct entry pay of higher scale", "5% increase"], c: 0, e: "FR 22(I)(a)(1) mandates one notional increment in the feeder level before locating the matching cell in higher level." },
+        { q: "Under CCS (Leave) Rules, 1972, what is the maximum number of days of Leave Not Due (LND) that can be granted during entire service?", opts: ["180 days", "240 days", "360 days", "500 days"], c: 2, e: "Rule 31 restricts Leave Not Due to a maximum of 360 days during entire government service on medical certificate." },
+        { q: "Under CCS (Pension) Rules, 2021, what is the rate of enhanced family pension payable to the family upon death of an official while in service?", opts: ["30% of last pay for 5 years", "50% of last pay for a period of 10 years", "100% of last pay for 7 years", "40% of last pay till 65 years"], c: 1, e: "Enhanced family pension is payable at 50% of last pay drawn for 10 years from the date following death." },
+        { q: "Under CCS (LTC) Rules, 1988, a fresh recruit to Central Government service is entitled to travel to Home Town / Anywhere in India for:", opts: ["Every 2 years", "Home town for first 3 years and Anywhere in India in 4th year for initial 8 years", "Only once in 4 years", "Anywhere in India each year"], c: 1, e: "Fresh recruits enjoy conversion facilities for home town in first 3 years and all India in 4th year for 2 blocks (8 years)." },
+        { q: "Under CCS (Conduct) Rules, 1964, a Government servant must submit an intimation to the prescribed authority regarding acquisition of immovable property within:", opts: ["15 days", "30 days", "60 days", "90 days"], c: 1, e: "Rule 18 requires prior sanction or report within 30 days of acquisition through regular channels." },
+        { q: "Under Children Education Allowance (CEA) rules, what is the maximum reimbursement allowed per child per month?", opts: ["₹1,500", "₹2,250 (enhanced by 25% to ₹2,812.50 on 50% DA)", "₹3,000", "₹1,800"], c: 1, e: "Base CEA is ₹2,250/month per child (max 2 children), increased by 25% to ₹2,812.50 when DA crosses 50%." },
+        { q: "Under CCS (CCA) Rules, 1965, withholding of increments of pay with cumulative effect is classified as:", opts: ["Minor Penalty", "Major Penalty", "Administrative Warning", "Censure"], c: 1, e: "Rule 11 explicitly classifies withholding of increments with cumulative effect as a Major Penalty requiring Rule 14 inquiry." }
+      ];
+    } else {
+      // AAO Paper 3 & 4 Special: Postal Accounts, Telecom Reforms 2021, AGR, GST & Taxation
+      masterPool = [
+        { q: "In Telecom Accounts, what does 'AGR' stand for under Telecom Reforms 2021?", opts: ["Annual Gross Revenue", "Adjusted Gross Revenue", "Applicable Gross Receipts", "Aggregate Government Returns"], c: 1, e: "AGR stands for Adjusted Gross Revenue, calculated after allowable deductions from Applicable Gross Revenue (ApGR)." },
+        { q: "Under Telecom Reforms 2021, which of the following is excluded from Gross Revenue (GR) to arrive at ApGR?", opts: ["Revenue from mobile voice calls", "Revenue from telecom infrastructure sharing", "Revenue from activities other than telecom services (non-telecom income)", "Data package recharges"], c: 2, e: "Non-telecom income like dividends, interest, forex gains, and sale of fixed assets is excluded from GR under Reforms 2021." },
+        { q: "Under the Income Tax Act, 1961, which section governs Tax Deducted at Source (TDS) on salaries of employees?", opts: ["Section 192", "Section 194C", "Section 194J", "Section 195"], c: 0, e: "Section 192 obligates every Drawing and Disbursing Officer (DDO) to deduct income tax on estimated salary income." },
+        { q: "Under Postal Accounts Manual Vol I, how is the clearance of remittance transactions between Post Offices and Banks monitored?", opts: ["Through Audit Register", "Through Remittance Ledger and Reconciliation with RBI / Focal Point Bank", "Through Stock Book", "Through Daily SO Slip"], c: 1, e: "Remittance transactions are reconciled via Remittance Ledgers matched against scroll statements of accredited banks." },
+        { q: "Under Goods and Services Tax (GST) provisions applicable to Central Government Departments, what is the rate of TDS deducted under Section 51?", opts: ["1% CGST + 1% SGST (Total 2%)", "5%", "0.5%", "3%"], c: 0, e: "Government departments deduct 2% TDS (1% CGST + 1% SGST or 2% IGST) on taxable contracts exceeding ₹2.5 Lakh." },
+        { q: "In Department of Posts accounting, the Head of Circle's discretionary grant is audited by:", opts: ["Director Postal Accounts / Internal Audit Party", "Divisional Head", "Inspector Posts", "Local Panchayat"], c: 0, e: "Discretionary funds are audited during regular circle audits by the Director of Postal Accounts (DPA)." },
+        { q: "Under the Universal Service Obligation Fund (USOF), funds are disbursed to telecom operators primarily for:", opts: ["Urban 5G towers", "Rural and remote telecom connectivity and broadband infrastructure", "Satellite television", "Marketing campaigns"], c: 1, e: "USOF subsidizes telecommunication services and digital access in rural and inaccessible tribal regions." },
+        { q: "In MS Excel, which shortcut key is used to toggle absolute and relative cell referencing (e.g., $A$1)?", opts: ["F2", "F4", "F7", "F12"], c: 1, e: "F4 cycles through absolute ($A$1), mixed (A$1, $A1), and relative (A1) references in Excel." }
+      ];
+    }
+  }
+
+  // Exact 100 Unique Questions Assemble
   const full100 = [];
   const baseCount = masterPool.length;
 
