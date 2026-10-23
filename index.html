@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Postal Exam Portal - LDCE Mock Tests & Prep Hub</title>
+  <title>Postal Exam Portal - LDCE Preparation & Practice</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Primary Navigation -->
+  <!-- Primary Navigation (Mobile Friendly) -->
   <header class="navbar">
     <div class="container nav-content">
       <div class="brand-container" onclick="showView('view-home')">
-        <img src="Postalexam.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'; document.getElementById('brand-fallback-icon').style.display='inline-block';">
-        <span id="brand-fallback-icon" class="brand-fallback" style="display:none;">📮</span>
+        <div class="brand-logo-wrapper">
+          <img src="Postalexam.png" alt="Logo" class="brand-logo" onerror="this.parentElement.classList.add('logo-fallback')">
+          <div class="logo-fallback-icon">📮</div>
+        </div>
         <div class="brand-text">
           <span class="brand-title">Postal Exam Portal</span>
           <span class="brand-tagline">Departmental LDCE Preparation Hub</span>
@@ -38,29 +40,29 @@
     <section class="hero-section">
       <div class="container hero-grid">
         <div class="hero-text">
-          <span class="hero-pill">Dedicated Postal Examination System</span>
-          <h1>Structured Preparation for Departmental LDCEs</h1>
+          <span class="hero-pill">Dedicated Postal Departmental Examination Platform</span>
+          <h1>Targeted Preparation for Postal LDCEs</h1>
           <p>
-            Authentic, rule-referenced online practice platforms tailored for Postal Inspectors and Group 'B' aspirants. 
-            Detailed explanations with Postal Manuals, Acts, and Service Rules.
+            Authentic, rule-referenced online practice platforms tailored for Inspector Posts and Postal Service Group 'B' aspirants. 
+            All mock questions are backed by Postal Manuals, Acts, Guidelines, and Service Rules.
           </p>
           <div class="hero-actions">
-            <button class="btn btn-primary" onclick="openExamHub('IPO')">Explore Inspector Posts</button>
-            <button class="btn btn-outline" onclick="openExamHub('PSB')">Explore PS Group B</button>
+            <button class="btn btn-primary" onclick="openExamHub('IPO')">Inspector Posts Portal →</button>
+            <button class="btn btn-outline" onclick="openExamHub('PSB')">PS Group B Portal →</button>
           </div>
         </div>
         <div class="hero-metrics">
           <div class="metric-card">
             <h3>200</h3>
-            <p>Model Practice Sets per Cadre</p>
+            <p>Model Sets per Cadre</p>
           </div>
           <div class="metric-card">
-            <h3>100%</h3>
-            <p>Rule Citations & Explanations</p>
+            <h3>50 Qs</h3>
+            <p>Per Standard Set</p>
           </div>
           <div class="metric-card">
-            <h3>3 Free</h3>
-            <p>Diagnostic Tests for All Aspirants</p>
+            <h3>3 Sets</h3>
+            <p>100% Free Practice</p>
           </div>
         </div>
       </div>
@@ -70,74 +72,74 @@
     <section class="exam-select-section container">
       <div class="section-heading">
         <h2>Select Examination Portal</h2>
-        <p>Choose your target cadre to access tests, latest patterns, eligibility and syllabus</p>
+        <p>Choose your examination cadre to access model papers, eligibility norms, and complete syllabi</p>
       </div>
 
       <div class="exam-grid">
-        <!-- Card 1: Inspector Posts -->
+        <!-- Exam Card 1: Inspector Posts -->
         <div class="exam-card">
-          <div class="card-badge ip-badge">LDCE IP Cadre</div>
+          <div class="card-badge ip-badge">LDCE Inspector Posts</div>
           <h3>Inspector Posts (IP) Examination</h3>
           <p class="exam-desc">
-            Based strictly on the Revised 3-Paper Scheme (DoP Letter No. 7-14/2011-SPN-II dated 22.08.2025). Complete coverage of The Post Office Act 2023, BNSS 2023, DIGIPIN, IT 2.0, and Postal Manuals.
+            Structured strictly as per Directorate Revised Pattern (dated 22.08.2025). Covers The Post Office Act 2023, BNSS 2023, DIGIPIN, IT 2.0, and Postal Manuals.
           </p>
           <ul class="exam-features">
             <li>✔ Paper-I (125 MCQs / 250 Marks) & Paper-III (150 MCQs / 300 Marks)</li>
-            <li>✔ Paper-II Descriptive (Noting, Drafting & Major Penalty Charge Sheet)</li>
-            <li>✔ Cadre Eligibility Criteria & Crucial Date Norms</li>
-            <li>✔ 3 Free Diagnostic Sets + 197 Advanced Paid Practice Papers</li>
+            <li>✔ Paper-II Descriptive Guidance (Noting, Drafting & Charge Sheet)</li>
+            <li>✔ Tests 1 to 3 Free Diagnostic Practice (50 Qs each)</li>
+            <li>✔ Full Eligibility Norms & Detailed Printable Syllabus</li>
           </ul>
           <div class="card-actions">
-            <button class="btn btn-primary full-width" onclick="openExamHub('IPO')">Open Inspector Posts Portal →</button>
+            <button class="btn btn-primary full-width" onclick="openExamHub('IPO')">Enter Inspector Posts Portal →</button>
           </div>
         </div>
 
-        <!-- Card 2: Postal Service Group B -->
+        <!-- Exam Card 2: Postal Service Group B -->
         <div class="exam-card">
-          <div class="card-badge psb-badge">LDCE Group B</div>
+          <div class="card-badge psb-badge">LDCE PS Group B</div>
           <h3>Postal Service Group 'B' Examination</h3>
           <p class="exam-desc">
-            Designed for Departmental candidates aiming for Postal Services Group B Administrative cadre. Covers operations, financial rules, manuals, and service jurisprudence.
+            Designed for supervisory and administrative personnel aspiring for promotion to the Postal Services Group 'B' Cadre.
           </p>
           <ul class="exam-features">
-            <li>✔ Paper I: Postal Operations, Manuals & Schemes (150 MCQs)</li>
-            <li>✔ Paper II: Establishment, CCS Rules, Financial Manuals & Acts (150 MCQs)</li>
-            <li>✔ Complete Eligibility Details & Service Conditions</li>
-            <li>✔ 3 Free Diagnostic Sets + 197 Advanced Paid Practice Papers</li>
+            <li>✔ Paper-I: Postal Operations, Manuals & Technology</li>
+            <li>✔ Paper-II: Establishment, CCS Rules, Financial Manuals & Acts</li>
+            <li>✔ Tests 1 to 3 Free Practice + 197 Advanced Full Practice Sets</li>
+            <li>✔ Comprehensive Eligibility Matrix & Complete Syllabus</li>
           </ul>
           <div class="card-actions">
-            <button class="btn btn-primary full-width" onclick="openExamHub('PSB')">Open PS Group B Portal →</button>
+            <button class="btn btn-primary full-width" onclick="openExamHub('PSB')">Enter PS Group B Portal →</button>
           </div>
+        </div>
+      </div>
+
+      <!-- Amazon Affiliate Showcase Card -->
+      <div class="affiliate-banner-card">
+        <div class="affiliate-content">
+          <div class="affiliate-badge">Recommended Study Material</div>
+          <h3>Standard Reference Books & Bare Acts (Swamy's & Departmental Guides)</h3>
+          <p>
+            Equip your preparation with standard hardbound reference materials, including 
+            <b>Swamy’s PO Guide Part I</b>, Postal Manuals, GFR, and CCS Rulebooks directly on Amazon.
+          </p>
+          <div class="affiliate-perks">
+            <span>📖 Authentic Publications</span>
+            <span>🚚 Quick Delivery via Amazon</span>
+            <span>📦 Complete Syllabus Reference</span>
+          </div>
+        </div>
+        <div class="affiliate-action">
+          <a href="https://www.amazon.in/s?k=po+guide+part+1+swamy&crid=BATK77KEQ5XN&sprefix=Po+guide%2Caps%2C398&linkCode=ll2&tag=wwwfbcomrsara-21&linkId=6fc5eaa66391a01eb7eb0408caab2411&ref_=as_li_ss_tl" 
+             target="_blank" 
+             rel="noopener sponsored" 
+             class="btn-amazon">
+            <span class="amazon-icon">🛒</span> Buy Exam Books on Amazon →
+          </a>
+          <small class="affiliate-disclaimer">Official editions on Amazon India</small>
         </div>
       </div>
     </section>
 
-    <!-- Platform Highlights Section -->
-    <section class="features-section">
-      <div class="container">
-        <div class="section-heading">
-          <h2>Standard Examination Environment</h2>
-          <p>Engineered to simulate actual departmental examination conditions</p>
-        </div>
-        <div class="features-grid">
-          <div class="feature-item">
-            <div class="f-icon">⏱</div>
-            <h4>Real-Time Timed Tests</h4>
-            <p>Timed sections matching standard constraints to build speed and accuracy.</p>
-          </div>
-          <div class="feature-item">
-            <div class="f-icon">📖</div>
-            <h4>Authoritative Explanations</h4>
-            <p>Every question is backed by exact manual volumes, circular dates, and rule clauses.</p>
-          </div>
-          <div class="feature-item">
-            <div class="f-icon">🔒</div>
-            <h4>Transparent Pricing</h4>
-            <p>First 3 complete papers free for everyone. Single lifetime access fee for all 200 sets.</p>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- ================= VIEW 2: EXAM HUB ================= -->
@@ -149,7 +151,7 @@
         <button class="btn btn-light" onclick="showView('view-home')">← Back to Portal Home</button>
         <div class="hub-title-block">
           <h2 id="hub-title">Inspector Posts Examination Portal</h2>
-          <span id="hub-subtitle" class="text-muted">Updated Pattern, Eligibility & 200 Practice Sets</span>
+          <span id="hub-subtitle" class="text-muted">Updated Pattern & 200 Practice Sets</span>
         </div>
         <div id="user-tier-badge" class="badge">Free Mode: 3 Sets Unlocked</div>
       </div>
@@ -161,50 +163,69 @@
         <button class="tab-btn" id="tab-btn-syllabus" onclick="switchHubTab('syllabus')">📋 Full Syllabus & Pattern</button>
       </div>
 
-      <!-- Tab 1: 200 Test Grid -->
+      <!-- In-Hub Amazon Book Strip -->
+      <div class="hub-book-strip no-print">
+        <div class="hub-book-text">
+          <strong>📚 Need Physical Reference Books for this Syllabus?</strong>
+          <span>Get Swamy's PO Guide Part 1, Postal Manuals, and CCS Rules on Amazon.</span>
+        </div>
+        <a href="https://www.amazon.in/s?k=po+guide+part+1+swamy&crid=BATK77KEQ5XN&sprefix=Po+guide%2Caps%2C398&linkCode=ll2&tag=wwwfbcomrsara-21&linkId=6fc5eaa66391a01eb7eb0408caab2411&ref_=as_li_ss_tl" 
+           target="_blank" 
+           rel="noopener sponsored" 
+           class="btn-hub-amazon">
+          Find Books on Amazon ↗
+        </a>
+      </div>
+
+      <!-- Tab Content 1: 200 Test Grid -->
       <div id="hub-tab-tests" class="hub-tab-content">
         <div class="filter-strip">
-          <input type="text" id="test-search" placeholder="Search test by name or paper number..." onkeyup="filterTests()">
+          <input type="text" id="test-search" placeholder="Search test paper (e.g. Paper 1, Paper 15)..." onkeyup="filterTests()">
           <div class="quick-status">
             <span>Tests 1 to 3: <strong class="text-success">Free Practice</strong></span>
             <span>Tests 4 to 200: <strong class="text-warning">Premium Access</strong></span>
           </div>
         </div>
-        <div id="tests-grid" class="tests-grid"></div>
-      </div>
 
-      <!-- Tab 2: Eligibility Criteria -->
-      <div id="hub-tab-eligibility" class="hub-tab-content hidden">
-        <div class="content-box">
-          <div id="eligibility-details-container"></div>
+        <div id="tests-grid" class="tests-grid">
+          <!-- 200 Cards rendered by JS -->
         </div>
       </div>
 
-      <!-- Tab 3: Detailed Syllabus & Print View -->
+      <!-- Tab Content 2: Eligibility Criteria -->
+      <div id="hub-tab-eligibility" class="hub-tab-content hidden">
+        <div class="doc-card" id="eligibility-content">
+          <!-- Dynamic Content rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Tab Content 3: Syllabus & Print View -->
       <div id="hub-tab-syllabus" class="hub-tab-content hidden">
-        <div class="syllabus-toolbar no-print">
-          <div class="toolbar-actions">
-            <button class="btn btn-primary" onclick="printSyllabus()">🖨 Print Syllabus</button>
-            <button class="btn btn-outline" onclick="downloadSyllabusPDF()">📥 Download Syllabus (PDF)</button>
+        <div class="syllabus-action-bar no-print">
+          <div class="action-buttons">
+            <button class="btn btn-primary" onclick="triggerPrint()">🖨 Print Syllabus</button>
+            <button class="btn btn-outline" onclick="triggerDownloadPDF()">⬇ Download Syllabus (PDF)</button>
           </div>
         </div>
 
         <div id="syllabus-document" class="printable-syllabus-sheet">
           <div class="print-header">
             <div class="print-brand">
-              <h3>Postal Exam Portal</h3>
-              <p class="site-link">Departmental Examination Preparation Authority</p>
+              <h3>POSTAL EXAM PORTAL</h3>
+              <p class="site-link">Departmental Competitive Examination Hub</p>
             </div>
             <div class="print-meta">
               <span id="print-cadre-title">Departmental LDCE Examination</span>
-              <span class="print-date">Official Comprehensive Syllabus</span>
+              <span class="print-date">Official Pattern, Scheme & Syllabus</span>
             </div>
           </div>
 
-          <div id="syllabus-body"></div>
+          <div id="syllabus-body">
+            <!-- Full line-by-line syllabus injected by JS -->
+          </div>
 
           <div class="print-footer">
-            <p>Generated for reference from <b>Postal Exam Portal</b>. Verified against Directorate notifications.</p>
+            <p>Official Pattern & Syllabus reference generated via <b>Postal Exam Portal</b> for candidate preparation.</p>
           </div>
         </div>
       </div>
@@ -212,7 +233,7 @@
     </div>
   </main>
 
-  <!-- ================= VIEW 3: QUIZ PRACTICE SCREEN ================= -->
+  <!-- ================= VIEW 3: QUIZ PRACTICE SCREEN (50 QUESTIONS) ================= -->
   <main id="view-quiz" class="page-view hidden">
     <div class="container quiz-wrapper">
       <div class="quiz-nav-bar">
@@ -221,7 +242,7 @@
           <h3 id="quiz-heading">Paper</h3>
           <span id="quiz-cadre-tag" class="cadre-tag">Departmental Examination</span>
         </div>
-        <div id="quiz-timer" class="timer-box">⏱ 00:00</div>
+        <div id="quiz-timer" class="timer-box">⏱ 60:00</div>
       </div>
 
       <div class="quiz-card">
@@ -236,7 +257,7 @@
       <div class="quiz-controls">
         <button id="btn-prev" class="btn btn-secondary" onclick="navigateQuestion(-1)">Previous</button>
         <button id="btn-next" class="btn btn-secondary" onclick="navigateQuestion(1)">Next</button>
-        <button id="btn-submit" class="btn btn-success" onclick="confirmSubmitQuiz()">Submit Test</button>
+        <button id="btn-submit" class="btn btn-success" onclick="confirmSubmitQuiz()">Submit Test Paper</button>
       </div>
     </div>
   </main>
@@ -251,7 +272,7 @@
         <div class="result-stats">
           <div class="stat-box">
             <span id="res-score" class="stat-number">0</span>
-            <span class="stat-label">Marks Obtained</span>
+            <span class="stat-label">Marks Obtained (Out of 100)</span>
           </div>
           <div class="stat-box">
             <span id="res-correct" class="stat-number text-success">0</span>
@@ -263,7 +284,7 @@
           </div>
           <div class="stat-box">
             <span id="res-accuracy" class="stat-number text-primary">0%</span>
-            <span class="stat-label">Accuracy</span>
+            <span class="stat-label">Accuracy Rate</span>
           </div>
         </div>
 
@@ -292,9 +313,9 @@
         <p>Access all 200 full-length practice sets with complete explanations & rule citations.</p>
         <div class="upi-box">
           <label>UPI Payment Address:</label>
-          <div class="upi-copy-row">
+          <div class="upi-field-wrap">
             <input type="text" value="psaraswat@ptyes" readonly id="upi-field">
-            <button class="btn btn-secondary" onclick="copyUPI()">Copy</button>
+            <button class="btn-copy" onclick="copyUPI()">Copy UPI</button>
           </div>
           <small>Make payment and send screenshot via WhatsApp to receive your <b>Passcode Key</b>.</small>
         </div>
@@ -302,7 +323,7 @@
 
       <div class="access-form">
         <label for="access-key-input">Enter Your Activation Passcode:</label>
-        <input type="text" id="access-key-input" placeholder="e.g. POSTAL2026KEY">
+        <input type="text" id="access-key-input" placeholder="e.g. POSTAL999PASS">
         <button class="btn btn-success full-width" onclick="verifyAccessKey()">Activate Complete Access</button>
       </div>
     </div>
@@ -310,49 +331,50 @@
 
   <!-- Professional Platform Footer with Collapsible Sections -->
   <footer class="footer">
-    <div class="container footer-accordion-wrapper">
+    <div class="container footer-accordions">
       
-      <!-- Footer Accordion Item 1: About Portal -->
-      <div class="footer-accordion-item">
-        <div class="footer-accordion-header" onclick="toggleFooterAccordion('footer-about')">
-          <h4>POSTALEXAM PREPARATION PORTAL</h4>
-          <span class="accordion-icon" id="icon-footer-about">+</span>
-        </div>
-        <div class="footer-accordion-body" id="footer-about">
+      <!-- Accordion 1: About Portal -->
+      <div class="footer-acc-item">
+        <button class="footer-acc-header" onclick="toggleFooterAcc(this)">
+          <span>Postal Exam Portal Overview</span>
+          <span class="acc-chevron">+</span>
+        </button>
+        <div class="footer-acc-body">
           <p>
-            An authentic online testing and digital learning platform designed specifically for Department of Posts personnel preparing for competitive departmental examinations (LDCE IP & PS Group B).
+            <b>POSTAL EXAM PORTAL</b> is an authentic online testing and digital learning platform designed specifically for Department of Posts personnel preparing for competitive departmental examinations (LDCE IP & PS Group B). It features simulated mock tests, detailed rule-based explanations, and updated syllabus repositories.
           </p>
         </div>
       </div>
 
-      <!-- Footer Accordion Item 2: Quick Access -->
-      <div class="footer-accordion-item">
-        <div class="footer-accordion-header" onclick="toggleFooterAccordion('footer-links')">
-          <h4>Quick Access</h4>
-          <span class="accordion-icon" id="icon-footer-links">+</span>
-        </div>
-        <div class="footer-accordion-body" id="footer-links">
-          <ul class="footer-link-list">
-            <li><a href="javascript:void(0)" onclick="openExamHub('IPO')">Inspector Posts Portal</a></li>
-            <li><a href="javascript:void(0)" onclick="openExamHub('PSB')">PS Group B Portal</a></li>
+      <!-- Accordion 2: Quick Access -->
+      <div class="footer-acc-item">
+        <button class="footer-acc-header" onclick="toggleFooterAcc(this)">
+          <span>Quick Access</span>
+          <span class="acc-chevron">+</span>
+        </button>
+        <div class="footer-acc-body">
+          <ul class="footer-links-list">
+            <li><a href="javascript:void(0)" onclick="openExamHub('IPO')">Inspector Posts (IP) Portal</a></li>
+            <li><a href="javascript:void(0)" onclick="openExamHub('PSB')">Postal Service Group 'B' Portal</a></li>
             <li><a href="javascript:void(0)" onclick="showView('view-home')">Home Dashboard</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- Footer Accordion Item 3: Official Legal Disclaimer -->
-      <div class="footer-accordion-item">
-        <div class="footer-accordion-header" onclick="toggleFooterAccordion('footer-disclaimer')">
-          <h4>Official Legal Disclaimer</h4>
-          <span class="accordion-icon" id="icon-footer-disclaimer">+</span>
-        </div>
-        <div class="footer-accordion-body" id="footer-disclaimer">
+      <!-- Accordion 3: Official Legal Disclaimer -->
+      <div class="footer-acc-item">
+        <button class="footer-acc-header" onclick="toggleFooterAcc(this)">
+          <span>Official Legal Disclaimer</span>
+          <span class="acc-chevron">+</span>
+        </button>
+        <div class="footer-acc-body">
           <div class="disclaimer-text">
             <p>
-              <b>Non-Affiliation Notice:</b> Postal Exam Portal is an independent, private educational and self-study platform. This portal is not affiliated with, sponsored by, or in any way officially connected to the Department of Posts (India Post), the Ministry of Communications, or any Government of India agency.
+              <b>Non-Affiliation Notice:</b> Postal Exam Portal is an independent, private educational and self-study practice platform. 
+              This portal is <b>NOT</b> affiliated with, sponsored by, or in any way officially connected to the Department of Posts (India Post), the Ministry of Communications, or any Government of India agency.
             </p>
             <p>
-              Official examination notices, eligibility notifications, recruitment rules, and examination schedules are governed exclusively by the Department of Posts through its official portal (indiapost.gov.in). Practice papers provided here are purely simulated mock questions curated for candidate self-preparation.
+              Official examination notices, eligibility determinations, recruitment rules, and dates are issued exclusively by the Department of Posts through its official website (indiapost.gov.in). Practice papers provided here are purely simulated mock questions curated for candidate revision and study purposes.
             </p>
           </div>
         </div>
@@ -363,6 +385,7 @@
     <div class="footer-bottom">
       <div class="container bottom-row">
         <span>© 2026 Postal Exam Portal. All rights reserved.</span>
+        <span>Dedicated to Departmental Candidates</span>
       </div>
     </div>
   </footer>
