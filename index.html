@@ -11,12 +11,12 @@
 </head>
 <body>
 
-  <!-- Navigation Bar -->
+  <!-- Primary Navigation (Mobile & Desktop) -->
   <header class="navbar">
     <div class="container nav-content">
       <div class="brand-container" onclick="showView('view-home')">
         <div class="brand-logo-wrapper">
-          <img src="Postalexam.png" alt="Portal Logo" class="brand-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback-text').style.display='flex';">
+          <img src="Postalexam.png" alt="Postal Exam Portal Logo" class="brand-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback-text').style.display='flex';">
           <div id="logo-fallback-text" class="logo-fallback-box" style="display: none;">📮</div>
         </div>
         <div class="brand-text">
@@ -30,6 +30,7 @@
         <button class="nav-btn" onclick="openExamHub('IPO')">Inspector Posts (IP)</button>
         <button class="nav-btn" onclick="openExamHub('PSB')">PS Group 'B'</button>
         <button class="nav-btn" onclick="openExamHub('AAO')">AAO (IP&TAFS)</button>
+        <button class="nav-btn" onclick="openExamHub('PASA')">PA / SA LDCE</button>
       </nav>
     </div>
   </header>
@@ -41,21 +42,22 @@
     <section class="hero-section">
       <div class="container hero-grid">
         <div class="hero-text">
-          <span class="hero-pill">Official Departmental LDCE Platform</span>
+          <span class="hero-pill">Official Departmental LDCE Preparation Platform</span>
           <h1>Targeted Preparation for Postal & Accounts LDCEs</h1>
           <p>
-            Authentic, rule-referenced online practice platforms tailored for Inspector Posts, Postal Service Group 'B', and Assistant Accounts Officer (AAO) aspirants.
+            Authentic, rule-referenced online practice platforms tailored for Inspector Posts, Postal Service Group 'B', Assistant Accounts Officer (AAO), and Postal Assistant / Sorting Assistant (PA/SA) aspirants.
           </p>
           <div class="hero-actions">
             <button class="btn btn-primary" onclick="openExamHub('IPO')">Inspector Posts (IP) →</button>
             <button class="btn btn-secondary" onclick="openExamHub('PSB')">PS Group 'B' →</button>
-            <button class="btn btn-outline" onclick="openExamHub('AAO')">AAO (IP&TAFS) →</button>
+            <button class="btn btn-secondary" onclick="openExamHub('AAO')">AAO (IP&TAFS) →</button>
+            <button class="btn btn-outline" onclick="openExamHub('PASA')">PA / SA LDCE →</button>
           </div>
         </div>
         <div class="hero-metrics">
           <div class="metric-card">
-            <h3>3</h3>
-            <p>Targeted Cadres (IP, PSB, AAO)</p>
+            <h3>4</h3>
+            <p>Targeted Cadres (IP, PSB, AAO, PA/SA)</p>
           </div>
           <div class="metric-card">
             <h3>100 Qs</h3>
@@ -69,38 +71,38 @@
       </div>
     </section>
 
-    <!-- Exam Selection Cards -->
+    <!-- Main Exam Selection Section (4 Cadres Grid) -->
     <section class="exam-select-section container">
       <div class="section-heading">
         <h2>Select Examination Portal</h2>
-        <p>Choose your examination cadre to access model papers, eligibility norms, and complete syllabi</p>
+        <p>Choose your target cadre to access model papers, eligibility norms, and complete syllabi</p>
       </div>
 
       <div class="exam-grid">
-        <!-- Card 1: Inspector Posts -->
+        <!-- Exam Card 1: Inspector Posts -->
         <div class="exam-card">
           <div class="card-badge ip-badge">LDCE Inspector Posts</div>
           <h3>Inspector Posts (IP) Examination</h3>
           <p class="exam-desc">
-            Structured strictly as per Directorate Revised Pattern (22.08.2025). Covers The Post Office Act 2023, BNSS 2023, DIGIPIN, IT 2.0, and Postal Manuals.
+            Structured strictly as per Directorate Revised Pattern (dated 22.08.2025). Covers The Post Office Act 2023, BNSS 2023, DIGIPIN, IT 2.0, and Postal Manuals.
           </p>
           <ul class="exam-features">
             <li>✔ Paper-I (125 MCQs / 250 Marks) & Paper-III (150 MCQs / 300 Marks)</li>
             <li>✔ Paper-II Descriptive Guidance (Noting, Drafting & Charge Sheet)</li>
             <li>✔ Tests 1, 2, 3 Free Practice (100 Unique Questions Each)</li>
-            <li>✔ Official Eligibility Matrix & Printable Syllabus</li>
+            <li>✔ Full Eligibility Norms & Detailed Printable Syllabus</li>
           </ul>
           <div class="card-actions">
             <button class="btn btn-primary full-width" onclick="openExamHub('IPO')">Enter Inspector Posts Portal →</button>
           </div>
         </div>
 
-        <!-- Card 2: Postal Service Group B -->
+        <!-- Exam Card 2: Postal Service Group B -->
         <div class="exam-card">
           <div class="card-badge psb-badge">LDCE PS Group B</div>
           <h3>Postal Service Group 'B' Examination</h3>
           <p class="exam-desc">
-            Designed for supervisory and administrative personnel aspiring for promotion to the Postal Services Group 'B' Cadre.
+            Designed for supervisory and administrative personnel aspiring for promotion to the Postal Services Group 'B' Administrative Cadre.
           </p>
           <ul class="exam-features">
             <li>✔ Paper-I: Postal Operations, Manuals & Technology</li>
@@ -113,7 +115,7 @@
           </div>
         </div>
 
-        <!-- Card 3: Assistant Accounts Officer (AAO) -->
+        <!-- Exam Card 3: Assistant Accounts Officer (AAO) -->
         <div class="exam-card">
           <div class="card-badge aao-badge">LDCE AAO (IP&TAFS)</div>
           <h3>Assistant Accounts Officer (AAO)</h3>
@@ -124,15 +126,33 @@
             <li>✔ Comprehensive 6-Paper Scheme (Financial Rules, Service Rules, Postal & Telecom Accounts, IT)</li>
             <li>✔ Covers GFR 2017, FHB I & II, Book-Keeping, GAR 1990, FR-SR, Pension 2021, AGR & SUC</li>
             <li>✔ Tests 1, 2, 3 Free Practice (100 Unique Questions Each)</li>
-            <li>✔ Official Recruitment Rules 2018 Feeder Eligibility & Printable Syllabus</li>
+            <li>✔ Detailed Feeder Cadre Eligibility Table & Printable 6-Paper Syllabus</li>
           </ul>
           <div class="card-actions">
             <button class="btn btn-primary full-width" onclick="openExamHub('AAO')">Enter AAO Portal →</button>
           </div>
         </div>
+
+        <!-- Exam Card 4: Postal Assistant / Sorting Assistant (PA/SA) -->
+        <div class="exam-card">
+          <div class="card-badge pasa-badge">LDCE PA / SA Cadre</div>
+          <h3>Postal Assistant & Sorting Assistant (PA/SA)</h3>
+          <p class="exam-desc">
+            Competitive examination limited to Postman, Mail Guard, MTS, and GDS for appointment as Postal Assistant and Sorting Assistant.
+          </p>
+          <ul class="exam-features">
+            <li>✔ Paper-I (100 Marks): Part-A Postal Domain (50 Qs) + Part-B GK, Maths & Reasoning (50 Qs)</li>
+            <li>✔ Paper-II (50 Marks): Translation & Local Language Drafting (Qualifying)</li>
+            <li>✔ Paper-III (25 Marks): DEST (1200 Key Depressions / 15 Mins)</li>
+            <li>✔ Tests 1, 2, 3 Free Practice (100 Unique Questions Each)</li>
+          </ul>
+          <div class="card-actions">
+            <button class="btn btn-primary full-width" onclick="openExamHub('PASA')">Enter PA / SA Portal →</button>
+          </div>
+        </div>
       </div>
 
-      <!-- Amazon Affiliate Card -->
+      <!-- Amazon Affiliate Showcase Card -->
       <div class="affiliate-banner-card">
         <div class="affiliate-content">
           <div class="affiliate-badge">Recommended Study Material</div>
@@ -144,7 +164,7 @@
           <div class="affiliate-perks">
             <span>📖 Authentic Publications</span>
             <span>🚚 Quick Delivery via Amazon</span>
-            <span>📦 IP, PS Gr B & AAO Syllabus Reference</span>
+            <span>📦 IP, PS Gr B, AAO & PA/SA Syllabus Reference</span>
           </div>
         </div>
         <div class="affiliate-action">
@@ -165,17 +185,17 @@
   <main id="view-exam-hub" class="page-view hidden">
     <div class="container">
       
-      <!-- Hub Header -->
+      <!-- Hub Breadcrumb & Navigation -->
       <div class="hub-header">
         <button class="btn btn-light" onclick="showView('view-home')">← Back to Portal Home</button>
         <div class="hub-title-block">
-          <h2 id="hub-title">Inspector Posts Examination Portal</h2>
+          <h2 id="hub-title">Examination Portal</h2>
           <span id="hub-subtitle" class="text-muted">Updated Pattern & 200 Practice Sets</span>
         </div>
         <div id="user-tier-badge" class="badge">Free Mode: 3 Sets Unlocked</div>
       </div>
 
-      <!-- Hub Tabs -->
+      <!-- Hub Tab Controller -->
       <div class="hub-tabs">
         <button class="tab-btn active" id="tab-btn-tests" onclick="switchHubTab('tests')">📝 Practice Papers (200 Sets)</button>
         <button class="tab-btn" id="tab-btn-eligibility" onclick="switchHubTab('eligibility')">🎓 Cadre Eligibility Details</button>
@@ -264,7 +284,7 @@
       <div class="quiz-card">
         <div class="quiz-card-header">
           <span id="q-counter">Question 1 of 100</span>
-          <span class="marks-info">+2.0 Marks for Correct Answer</span>
+          <span class="marks-info">+1.0 or +2.0 Marks for Correct Answer</span>
         </div>
         <div id="q-text" class="question-statement"></div>
         <div id="options-group" class="options-group"></div>
@@ -288,7 +308,7 @@
         <div class="result-stats">
           <div class="stat-box">
             <span id="res-score" class="stat-number">0</span>
-            <span class="stat-label">Marks Obtained (Out of 200)</span>
+            <span class="stat-label">Marks Obtained</span>
           </div>
           <div class="stat-box">
             <span id="res-correct" class="stat-number text-success">0</span>
@@ -345,7 +365,7 @@
     </div>
   </div>
 
-  <!-- Professional Footer -->
+  <!-- Professional Platform Footer -->
   <footer class="footer">
     <div class="container footer-accordions">
       
@@ -360,7 +380,7 @@
         </button>
         <div class="footer-acc-body">
           <p>
-            <b>POSTAL EXAM PORTAL</b> is an authentic online testing and digital learning platform designed specifically for Department of Posts and Department of Telecommunications personnel preparing for competitive departmental examinations (LDCE IP, PS Group B, and AAO IP&TAFS). It features simulated mock tests, detailed rule-based explanations, and updated syllabus repositories.
+            <b>POSTAL EXAM PORTAL</b> is an authentic online testing and digital learning platform designed specifically for Department of Posts and Department of Telecommunications personnel preparing for competitive departmental examinations (LDCE IP, PS Group B, AAO IP&TAFS, and PA/SA). It features simulated mock tests, detailed rule-based explanations, and updated syllabus repositories.
           </p>
         </div>
       </div>
@@ -376,12 +396,13 @@
             <li><a href="javascript:void(0)" onclick="openExamHub('IPO')">Inspector Posts (IP) Portal</a></li>
             <li><a href="javascript:void(0)" onclick="openExamHub('PSB')">Postal Service Group 'B' Portal</a></li>
             <li><a href="javascript:void(0)" onclick="openExamHub('AAO')">Assistant Accounts Officer (AAO) Portal</a></li>
+            <li><a href="javascript:void(0)" onclick="openExamHub('PASA')">Postal Assistant / Sorting Assistant (PA/SA) Portal</a></li>
             <li><a href="javascript:void(0)" onclick="showView('view-home')">Home Dashboard</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- Accordion 3: Legal Disclaimer -->
+      <!-- Accordion 3: Official Legal Disclaimer -->
       <div class="footer-acc-item">
         <button class="footer-acc-header" onclick="toggleFooterAcc(this)">
           <span>Official Legal Disclaimer</span>
